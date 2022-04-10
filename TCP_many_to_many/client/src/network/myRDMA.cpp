@@ -170,6 +170,7 @@ void myRDMA::recv_t(int socks_cnt, const char* opcode){
     }
     printf("hello~1\n");
     printf("vector len : %d\n", worker.size());
+    printf("socks_cnt : %d\n", socks_cnt);
     for(int i=0;i<socks_cnt;i++){
         worker[i].join();
         printf("hello~2\n");
