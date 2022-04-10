@@ -8,7 +8,7 @@
 class rdmaBenchmark : public myRDMA
 {
 public:
-    rdmaBenchmark();
+    //rdmaBenchmark();
     void run_bench(int socks_cnt, int msg_size, bool isServer);
     void run_bench_write(int socks_cnt, int msg_size, bool isServer);
     
