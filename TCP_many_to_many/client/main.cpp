@@ -2,7 +2,7 @@
 #include <network/myRDMA.hpp>
 
 #define num_of_server 3
-const char* server[num_of_server] = {"192.168.1.101", "192.168.1.102", "192.168.1.103"};
+const char* server[num_of_server] = {"192.168.1.100", "192.168.1.101", "192.168.1.102"};
 
 int main(int argc, char* argv[]){
   if(argc != 3)
@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
   int socks_cnt;
 
   TCP tcp;
-  myRDMA myrdma;
+  myRDMA myrdma;192
   
   cout << "Connecting tcp" <<endl;
   tcp.connect_tcp(argv[1], server);
