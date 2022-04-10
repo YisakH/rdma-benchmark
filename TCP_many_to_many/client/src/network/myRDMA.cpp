@@ -1,7 +1,5 @@
-#include "tcp.hpp"
-#include "RDMA.hpp"
-#include "myRDMA.hpp"
-#include <time.h>
+#include <network/myRDMA.hpp>
+
 static std::mutex mutx;
 myRDMA myrdma;
 

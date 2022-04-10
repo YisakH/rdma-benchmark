@@ -4,7 +4,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 
 add_library(network STATIC ${SRC_FILES})
 
-target_include_directories(network PUBLIC ../../includes/network)
+target_include_directories(network PUBLIC ${CMAKE_SOURCE_DIR}/includes)
 
 target_link_libraries(network PRIVATE pthread ibverbs)
 

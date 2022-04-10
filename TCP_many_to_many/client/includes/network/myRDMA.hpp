@@ -1,6 +1,9 @@
 #define BufSize 1024
 #include <vector>
 #include <string>
+#include <network/tcp.hpp>
+#include <network/RDMA.hpp>
+#include <time.h>
 
 using namespace std;
 class myRDMA{
@@ -18,7 +21,6 @@ class myRDMA{
         void send_info_change_qp(int socks_cnt);
         void exit_rdma(int socks_cnt);
         int cnt_thread();
-    private:
         std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
                         int, struct ibv_cq*,
                         struct ibv_qp*, struct ibv_mr*,
