@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
   int socks_cnt;
 
   TCP tcp;
-  myRDMA myrdma;192
+  myRDMA myrdma;
   
   cout << "Connecting tcp" <<endl;
   tcp.connect_tcp(argv[1], server);
