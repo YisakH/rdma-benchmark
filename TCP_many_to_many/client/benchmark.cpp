@@ -23,7 +23,8 @@ int main(int argc, char* argv[]){
   int socks_cnt;
 
   TCP tcp;
-  myRDMA myrdma;
+  rdmaBenchmark rdmaBenchmark;
+
   
   cout << "Connecting tcp" <<endl;
   tcp.connect_tcp(IP, server);
@@ -31,12 +32,11 @@ int main(int argc, char* argv[]){
   
   socks_cnt = tcp.s_cnt();
   
-  myrdma.create_rdma_info(socks_cnt);
-  myrdma.send_info_change_qp(socks_cnt);
+  rdmaBenchmark.create_rdma_info(socks_cnt);
+  rdmaBenchmark.send_info_change_qp(socks_cnt);
 
 
-  rdmaBenchmark rdmaBenchmark;
-
+  
   for (int msg_size=1; msg_size<=MAX_MSG_SIZE; msg_size*=2)
     rdmaBenchmark.run_bench_write(socks_cnt, msg_size, isServer);
 
@@ -55,6 +55,6 @@ int main(int argc, char* argv[]){
     sleep(10);        
   }*/
 
-  myrdma.exit_rdma(socks_cnt);
+  rdmaBenchmark.exit_rdma(socks_cnt);
   return 0;
 }
