@@ -11,6 +11,10 @@ static std::vector<tuple<struct ibv_context*, struct ibv_pd*,
                 int, struct ibv_cq*,
                 struct ibv_qp*, struct ibv_mr*,
                 uint16_t, uint32_t>> rdma_info[2];
+
+char send_buffer[3][BufSize];
+char recv_buffer[3][BufSize];
+vector<int> sock_idx;
 class myRDMA{
     public:
         void send_rdma(char* msg, int i);
@@ -30,7 +34,4 @@ class myRDMA{
         std::vector<pair<string,string>> qp_key;
         int thread_cnt = 0;
         int check_exit = 0;
-        char send_buffer[3][BufSize];
-        char recv_buffer[3][BufSize];
-        vector<int> sock_idx;
 };
