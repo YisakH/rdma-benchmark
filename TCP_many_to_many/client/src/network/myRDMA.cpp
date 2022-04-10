@@ -156,7 +156,6 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg){
 }
 void myRDMA::recv_t(int socks_cnt, const char* opcode){
     std::vector<std::thread> worker;
-    printf("hello~1\n");
     if (strcmp(opcode,"send") == 0){
         for(int i=0;i<socks_cnt;i++){
             worker.push_back(std::thread(&myRDMA::send_recv_rdma,myRDMA(),i,socks_cnt));
@@ -169,6 +168,7 @@ void myRDMA::recv_t(int socks_cnt, const char* opcode){
              thread_cnt++;
         }
     }
+    printf("hello~1\n");
     for(int i=0;i<socks_cnt;i++){
         worker[i].join();
     }
