@@ -75,31 +75,6 @@ void myRDMA::send_recv_rdma(int i, int socks_cnt){
 
         mutx.unlock();
     }
-    //}
-    /*while(1){
-        char msg[BufSize];
-
-        rdma.post_rdma_recv(get<4>(myrdma.rdma_info[1][i]), get<5>(myrdma.rdma_info[1][i]), 
-                            get<3>(myrdma.rdma_info[1][i]),myrdma.recv_buffer[i], sizeof(myrdma.recv_buffer[i]));
-        rdma.pollCompletion(get<3>(myrdma.rdma_info[1][i]));
-        
-        if(strcmp(myrdma.recv_buffer[i],"exit\n")==0){
-            myrdma.thread_cnt--;
-            if(myrdma.thread_cnt==socks_cnt-1 && myrdma.check_exit == 0){
-                sleep(0.5);
-                cout << "----  Another server has exit  ----"<< endl;
-                cout << "----     Please type exit      ----" << endl;
-            }
-            break;
-        }
-
-        mutx.lock();
-
-        cout << "recv_buffer[" <<i<<"] = ";
-        printf("%s", myrdma.recv_buffer[i]);
-
-        mutx.unlock();
-    }*/
 }
 
 void myRDMA::write_recv_rdma(int i, int socks_cnt){
@@ -171,8 +146,8 @@ void myRDMA::recv_t(int socks_cnt, const char* opcode){
     printf("hello~1\n");
     printf("vector len : %d\n", worker.size());
     printf("socks_cnt : %d\n", socks_cnt);
-    for(int i=0;i<socks_cnt && worker.size() > 0;i++){
-        worker[i].join();
+    while(worker.size()>0){
+        worker.back().join();
         printf("hello~2\n");
     }
 }
