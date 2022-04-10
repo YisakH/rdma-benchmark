@@ -2,7 +2,7 @@
 #include <network/myRDMA.hpp>
 
 #define num_of_server 2
-const char* server[num_of_server] = {"192.168.1.100", "192.168.1.101", "192.168.1.102"};
+const char* server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
 
 int main(int argc, char* argv[]){
   if(argc != 3)
