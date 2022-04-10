@@ -63,6 +63,7 @@ void myRDMA::write_rdma_with_imm(char *msg, int i){
 void myRDMA::send_recv_rdma(int i, int socks_cnt){
     TCP tcp;
     RDMA rdma;
+    printf("hello~");
     while(1){
         rdma.post_rdma_recv(get<4>( rdma_info[1][i]), get<5>( rdma_info[1][i]), 
                             get<3>( rdma_info[1][i]), recv_buffer[i], sizeof( recv_buffer[i]));
@@ -155,6 +156,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg){
 }
 void myRDMA::recv_t(int socks_cnt, const char* opcode){
     std::vector<std::thread> worker;
+    printf("hello~1\n");
     if (strcmp(opcode,"send") == 0){
         for(int i=0;i<socks_cnt;i++){
             worker.push_back(std::thread(&myRDMA::send_recv_rdma,myRDMA(),i,socks_cnt));
