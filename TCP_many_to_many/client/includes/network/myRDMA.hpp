@@ -6,6 +6,11 @@
 #include <time.h>
 
 using namespace std;
+
+static std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>> rdma_info[2];
 class myRDMA{
     public:
         void send_rdma(char* msg, int i);
@@ -21,10 +26,7 @@ class myRDMA{
         void send_info_change_qp(int socks_cnt);
         void exit_rdma(int socks_cnt);
         int cnt_thread();
-        static std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
-                        int, struct ibv_cq*,
-                        struct ibv_qp*, struct ibv_mr*,
-                        uint16_t, uint32_t>> rdma_info[2];
+
         std::vector<pair<string,string>> qp_key;
         int thread_cnt = 0;
         int check_exit = 0;
