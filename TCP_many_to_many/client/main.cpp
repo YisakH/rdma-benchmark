@@ -1,6 +1,6 @@
-#include "tcp.hpp"
-#include "RDMA.hpp"
-#include "myRDMA.hpp"
+#include <network/tcp.hpp>
+#include <network/myRDMA.hpp>
+
 #define num_of_server 3
 const char* server[num_of_server] = {"192.168.1.101", "192.168.1.102", "192.168.1.103"};
 
