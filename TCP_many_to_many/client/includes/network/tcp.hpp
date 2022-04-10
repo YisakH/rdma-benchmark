@@ -18,7 +18,7 @@
 #define PORT1 40145
 #define BUF_SIZE 100
 #define NAME_SIZE 20
-#define NumOfServer 3
+#define NumOfServer 2
 
 using namespace std;
 class TCP{

@@ -1,7 +1,7 @@
 #include <network/tcp.hpp>
 #include <network/myRDMA.hpp>
 
-#define num_of_server 3
+#define num_of_server 2
 const char* server[num_of_server] = {"192.168.1.100", "192.168.1.101", "192.168.1.102"};
 
 int main(int argc, char* argv[]){
