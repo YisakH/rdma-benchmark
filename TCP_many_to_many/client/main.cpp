@@ -29,16 +29,16 @@ int main(int argc, char* argv[]){
     //myrdma.send_t(socks_cnt);
     //for(int i=0;i<10000;i++){
     //  cout << i <<" ";
-    myrdma.rdma_send_msg(socks_cnt,"send","abasdfasdf3w");
-    myrdma.rdma_send_msg(socks_cnt,"send","basdfewq dsfasdf");
-    myrdma.rdma_send_msg(socks_cnt,"send","casdfeawfewawe");
+    //myrdma.rdma_send_msg(socks_cnt,"send","msg1");
+    //myrdma.rdma_send_msg(socks_cnt,"send","msg2");
+    //myrdma.rdma_send_msg(socks_cnt,"send","msg3");
 
     myrdma.write_rdma("hello", 0);
     //myrdma.rdma_send_msg(socks_cnt,"write", "Yisak is not Handsome.");
   }
   else{                             //SN02, SN03
     //myrdma.recv_t(socks_cnt,"send");                   
-    myrdma.recv_t(socks_cnt,"send");
+    //myrdma.recv_t(socks_cnt,"send");
     sleep(10);
     myrdma.write_recv_rdma(0, 0);
   }
