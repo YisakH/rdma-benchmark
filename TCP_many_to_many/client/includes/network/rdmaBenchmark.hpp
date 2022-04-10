@@ -13,8 +13,8 @@ public:
     void run_bench_write(int socks_cnt, int msg_size, bool isServer);
     
 private:
-    char *send_buffer[3];
-    char *recv_buffer[3];
+    //char *send_buffer[3];
+    //char *recv_buffer[3];
     void bench_send(int socks_cnt, int msg_size, char *msg);
     void bench_write(int socks_cnt, int msg_size, char *msg);
     void bench_revb();
