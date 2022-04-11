@@ -88,6 +88,7 @@ void TCP::connect_tcp(const char* ip, const char* server[]){
    TCP::client_t(ip, server);
    serv.join();
   
+  cout << "TCP :: connect_tcp complete" << endl;
 }
 map<string, string> TCP::read_rdma_info(int ip){
    map<string, string> info;

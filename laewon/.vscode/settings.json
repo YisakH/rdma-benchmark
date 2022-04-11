@@ -4,6 +4,6 @@
         "thread": "cpp"
     },
     "cmake.debugConfig": {
-        "args": ["192.168.1.100", "s"]
+        "args": ["192.168.1.100", "c"]
     }
 }

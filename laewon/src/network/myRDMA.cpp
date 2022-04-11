@@ -112,6 +112,8 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg){
     //fgets(mmsg,BufSize,stdin);
     std::vector<std::thread> worker;
 
+    cout << "hello" <<endl;
+
     if (strcmp(opcode,"send") == 0){
         cout << "send_rdma run" <<endl;
         for(int i=0;i<socks_cnt;i++){
@@ -148,7 +150,7 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
     }
     else if(strcmp(opcode,"write") == 0){
         for(int i=0;i<socks_cnt;i++){
-            //worker.push_back(std::thread(&myRDMA::write_recv_rdma,myRDMA(),i,socks_cnt));
+            worker.push_back(std::thread(&myRDMA::write_recv_rdma,myRDMA(),i,socks_cnt));
            // myrdma.thread_cnt++;
         }
     }
@@ -162,8 +164,8 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
         cout << "recv_t opcode error" << endl;
         exit(-1);
     }
-    while(worker.size() > 0){
-        worker.back().join();
+    for(int i=0;i<socks_cnt;i++){
+        worker[i].join();
     }
     return 1;
 }
@@ -226,7 +228,7 @@ void myRDMA::send_info_change_qp(int socks_cnt){
         }
         cout << "[ SUCCESS ]" << endl;
     }
-    cout << "Completely success" << endl;
+    cout << "Change Info success" << endl;
 }
 void myRDMA::create_rdma_info(int socks_cnt){
     RDMA rdma;

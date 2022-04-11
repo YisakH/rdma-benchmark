@@ -46,7 +46,6 @@ int main(int argc, char* argv[]){
   cout << "======================================================"<<endl;                  
   
   if(strcmp(argv[2],"s")==0){
-    
     /*
     myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
 
@@ -54,6 +53,7 @@ int main(int argc, char* argv[]){
       cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
     }
     */
+
    for(int msg_size = 1; msg_size <=1048576;msg_size*=2){
       
 
