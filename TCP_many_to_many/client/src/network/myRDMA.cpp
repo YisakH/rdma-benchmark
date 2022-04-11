@@ -40,6 +40,7 @@ void myRDMA::send_rdma(char* msg, int i){
     else
         cout << "send failed" << endl;
 }
+
 void myRDMA::write_rdma(char *msg, int i){
     RDMA rdma;
     TCP tcp;
@@ -61,6 +62,7 @@ void myRDMA::write_rdma(char *msg, int i){
     else
         cout << "send failed" << endl;
 }
+
 void myRDMA::write_rdma_with_imm(char *msg, int i){
     RDMA rdma;
     TCP tcp;
@@ -227,8 +229,10 @@ void myRDMA::send_info_change_qp(int socks_cnt, std::vector<tuple<
             rdma.changeQueuePairStateToRTR(get<4>( rdma_info[k^1][i]), PORT, 
                                            stoi(read_rdma_info.find("qp_num")->second), 
                                            stoi(read_rdma_info.find("lid")->second));
-                
-            if(k^1==0){
+
+
+            int real_k = k ^ 1;
+            if(k^1==1){
                 rdma.changeQueuePairStateToRTS(get<4>( rdma_info[k^1][i]));
                 qp_key.push_back(make_pair(read_rdma_info.find("addr")->second,read_rdma_info.find("rkey")->second));
             }
@@ -237,6 +241,10 @@ void myRDMA::send_info_change_qp(int socks_cnt, std::vector<tuple<
     }
     cout << "Completely success" << endl;
 }
+
+//
+// 이게 진짜 중요한데 여기서 에러 생기는 듯 함
+//
 std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
                 int, struct ibv_cq*,
                 struct ibv_qp*, struct ibv_mr*,
