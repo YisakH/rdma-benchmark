@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
                 int, struct ibv_cq*,
                 struct ibv_qp*, struct ibv_mr*,
                 uint16_t, uint32_t>>* rdmaInfo_ptr = rdma_benchmark.create_rdma_info(socks_cnt);
-  rdma_benchmark.send_info_change_qp(socks_cnt);
+  rdma_benchmark.send_info_change_qp(socks_cnt, rdmaInfo_ptr);
 
 
 

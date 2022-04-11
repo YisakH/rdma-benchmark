@@ -175,7 +175,12 @@ void myRDMA::run_chat(int socks_cnt){
     snd_msg.join();
 }
 
-void myRDMA::send_info_change_qp(int socks_cnt){
+void myRDMA::send_info_change_qp(int socks_cnt, std::vector<tuple<
+                struct ibv_context*,
+                struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>> * rdma_info){
     TCP tcp;
     RDMA rdma;
     //Send RDMA info
