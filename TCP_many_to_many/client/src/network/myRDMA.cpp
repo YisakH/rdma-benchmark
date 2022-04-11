@@ -232,7 +232,7 @@ void myRDMA::send_info_change_qp(int socks_cnt, std::vector<tuple<
 
 
             int real_k = k ^ 1;
-            if(k^1==1){
+            if(k==1){
                 rdma.changeQueuePairStateToRTS(get<4>( rdma_info[k^1][i]));
                 qp_key.push_back(make_pair(read_rdma_info.find("addr")->second,read_rdma_info.find("rkey")->second));
             }
