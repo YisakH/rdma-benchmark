@@ -36,7 +36,7 @@ void myRDMA::write_rdma(char *msg, int i){
                          sizeof(myrdma.send_buffer[i]), myrdma.qp_key[i].first, myrdma.qp_key[i].second);
     if(rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) ==true){
         cout << "send success" << endl;
-        tcp.send_msg("1", myrdma.sock_idx[i]);
+        //tcp.send_msg("1", myrdma.sock_idx[i]);
     }
     else
         cout << "send failed" << endl;
@@ -146,8 +146,8 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
     }
     else if(strcmp(opcode,"write") == 0){
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::write_recv_rdma,myRDMA(),i,socks_cnt));
-            myrdma.thread_cnt++;
+            //worker.push_back(std::thread(&myRDMA::write_recv_rdma,myRDMA(),i,socks_cnt));
+           // myrdma.thread_cnt++;
         }
     }
     else if (strcmp(opcode,"write_with_imm") == 0){

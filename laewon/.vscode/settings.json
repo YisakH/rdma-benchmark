@@ -1,5 +1,9 @@
 {
     "files.associations": {
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "thread": "cpp"
+    },
+    "cmake.debugConfig": {
+        "args": ["192.168.1.100", "s"]
     }
 }
