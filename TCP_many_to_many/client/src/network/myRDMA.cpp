@@ -222,9 +222,10 @@ void myRDMA::send_info_change_qp(int socks_cnt, std::vector<tuple<
                                            stoi(read_rdma_info.find("qp_num")->second), 
                                            stoi(read_rdma_info.find("lid")->second));
                 
-            if(k^1==0){
+            //if(k^1==0){
+            if(true){
                 rdma.changeQueuePairStateToRTS(get<4>( rdma_info[k^1][i]));
-                 qp_key.push_back(make_pair(read_rdma_info.find("addr")->second,read_rdma_info.find("rkey")->second));
+                qp_key.push_back(make_pair(read_rdma_info.find("addr")->second,read_rdma_info.find("rkey")->second));
             }
         }
         cout << "[ SUCCESS ]" << endl;
