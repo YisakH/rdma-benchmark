@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
   //argv[1] = (char *)server[0];
   //argv[2] = "s";
 
-  
+
   if(argc != 3)
   {
     cout << argv[0] << " <MY IP> " << endl;
@@ -58,13 +58,13 @@ int main(int argc, char* argv[]){
       
 
       for(int i=0; i<1000; i++){
-      myrdma.fucking_rdma(socks_cnt, "write", "Yisak is Handsome");
+        myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
       }
    }
   }
   else{
     for(int i = 0; i<socks_cnt;i++){
-      myrdma.recv_t(socks_cnt, "write");
+      myrdma.recv_t(socks_cnt, "send");
       cout << "SEND: "<<recv_buffer[i]<< endl;
     }
   }
