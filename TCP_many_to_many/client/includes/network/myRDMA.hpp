@@ -10,6 +10,14 @@ using namespace std;
 
 class myRDMA{
     public:
+        std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>> rdma_info[2];
+        char send_buffer[3][BufSize];
+        char recv_buffer[3][BufSize];
+        vector<int> sock_idx;
+
         void send_rdma(char* msg, int i);
         void write_rdma(char *msg, int i);
         void write_rdma_with_imm(char *msg, int i);

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstring>
 
-#define ITERATION 1000
+#define TOTAL_ 1000
 class rdmaBenchmark : public myRDMA
 {
 public:
