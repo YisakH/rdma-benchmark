@@ -23,11 +23,15 @@ int main(int argc, char* argv[]){
   int socks_cnt;
 
   TCP tcp;
-   rdmaBenchmark rdma_benchmark;
+  rdmaBenchmark rdma_benchmark;
+
+  char char_arr[20];
+
+  strcpy(char_arr, IP);
 
   
   cout << "Connecting tcp" <<endl;
-  tcp.connect_tcp(IP, server);
+  tcp.connect_tcp(char_arr, server);
   cout << "Connection completely success" << endl;
   
   socks_cnt = tcp.s_cnt();
