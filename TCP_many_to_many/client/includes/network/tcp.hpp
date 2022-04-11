@@ -15,7 +15,7 @@
 #include <thread>
 #include <mutex>
 #include "map"
-#define PORT1 40145
+#define PORT1 43030
 #define BUF_SIZE 100
 #define NAME_SIZE 20
 #define NumOfServer 2
