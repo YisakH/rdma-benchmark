@@ -49,6 +49,8 @@ void myRDMA::write_rdma(char *msg, int i){
     else{
         strcpy(send_buffer[i],msg);
     }
+    string strsoso = qp_key[i].first;
+    string strnono = qp_key[i].second;
 
     rdma.post_rdma_write(get<4>(rdma_info[0][i]), get<5>(rdma_info[0][i]), send_buffer[i], 
                          sizeof(send_buffer[i]), qp_key[i].first, qp_key[i].second);

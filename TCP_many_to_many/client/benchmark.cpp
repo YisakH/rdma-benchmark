@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
   check_host_entry(host_entry);
   IP = inet_ntoa(*((struct in_addr*) host_entry->h_addr_list[0]));
 
-  bool isServer = (IP[12]%2) == 0;
+  bool isServer = (IP[12]%2) == 1;
   int socks_cnt;
 
   TCP tcp;
