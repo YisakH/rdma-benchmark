@@ -54,7 +54,7 @@ void rdmaBenchmark::run_bench_write(int socks_cnt, int msg_size, bool isServer, 
     if(isServer)
     {
         cerr << "나는 수신만 할게" << endl;
-        sleep(10);
+        write_recv_rdma(0, 1);
     }
     else
     {
