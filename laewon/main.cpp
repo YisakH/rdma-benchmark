@@ -10,9 +10,11 @@ uint64_t timeDiff(struct timeval stop, struct timeval start) {
 //char msg[BufSize];
 
 int main(int argc, char* argv[]){
-  argc = 3;
-  argv[1] = (char *)server[0];
-  argv[2] = "s";
+  //argc = 3;
+  //argv[1] = (char *)server[0];
+  //argv[2] = "s";
+
+  
   if(argc != 3)
   {
     cout << argv[0] << " <MY IP> " << endl;
