@@ -9,6 +9,8 @@ char* change(string temp){
   return stc;
 }
 
+
+
 void myRDMA::send_rdma(char* msg, int i){
     RDMA rdma;
     TCP tcp;

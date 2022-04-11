@@ -5,7 +5,7 @@
 #define num_of_server 2
 #define MAX_MSG_SIZE 1048576
 
-const char* server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
+const char* server[num_of_server] = {"192.168.0.100", "192.168.0.101"};
 
 int main(int argc, char* argv[]){
   char host[256];
