@@ -48,7 +48,8 @@ int main(int argc, char* argv[]){
 
   
   for (int msg_size=1; msg_size<=MAX_MSG_SIZE; msg_size*=2)
-    rdma_benchmark.run_bench_write(socks_cnt, msg_size, isServer, rdmaInfo_ptr);
+    rdma_benchmark.run_bench(socks_cnt, msg_size, isServer);
+    //rdma_benchmark.run_bench_write(socks_cnt, msg_size, isServer, rdmaInfo_ptr);
 
 
   /*

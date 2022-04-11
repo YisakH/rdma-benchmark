@@ -5,16 +5,6 @@ uint64_t timeDiff(struct timeval stop, struct timeval start) {
 	return (stop.tv_sec * 1000000L + stop.tv_usec) - (start.tv_sec * 1000000L + start.tv_usec);
 }
 
-/*
-rdmaBenchmark::rdmaBenchmark()
-{
-    for (int i=0; i<3; i++){
-        this->send_buffer[i] = new char[BufSize];
-        this->recv_buffer[i] = new char[BufSize];
-    }
-}
-*/
-
 void rdmaBenchmark::run_bench(int socks_cnt, int msg_size, bool isServer)
 {
     cerr << "<-------  " << msg_size << "bytes 벤치마크 테스트 시작-------------->" << endl;
