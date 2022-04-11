@@ -53,7 +53,10 @@ void rdmaBenchmark::run_bench(int socks_cnt, int msg_size, bool isServer)
     }
 }
 
-void rdmaBenchmark::run_bench_write(int socks_cnt, int msg_size, bool isServer)
+void rdmaBenchmark::run_bench_write(int socks_cnt, int msg_size, bool isServer, std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>> * rdma_info)
 {
     cerr << "<-------  " << msg_size << "bytes 벤치마크 테스트 시작-------------->" << endl;
     
@@ -73,7 +76,7 @@ void rdmaBenchmark::run_bench_write(int socks_cnt, int msg_size, bool isServer)
         struct timeval start, stop;
 		gettimeofday(&start, NULL);
         
-        bench_write(socks_cnt, msg_size, msg);
+        bench_write(socks_cnt, msg_size, msg, rdma_info);
 
 		gettimeofday(&stop, NULL);
 
@@ -112,7 +115,10 @@ void rdmaBenchmark::bench_send(int socks_cnt, int msg_size, char *msg)
     }
 }
 
-void rdmaBenchmark::bench_write(int socks_cnt, int msg_size, char *msg)
+void rdmaBenchmark::bench_write(int socks_cnt, int msg_size, char *msg, std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>> *rdma_info)
 {
 
     for (int iter =0; iter<ITERATION; iter++) {
@@ -125,6 +131,7 @@ void rdmaBenchmark::bench_write(int socks_cnt, int msg_size, char *msg)
             //char name_msg[BufSize+strlen(name)];
 
             strcpy(send_buffer[i],msg);
+
 
             rdma.post_rdma_write(get<4>(rdma_info[0][i]), get<5>(rdma_info[0][i]), send_buffer[i], 
                          msg_size, qp_key[i].first, qp_key[i].second);

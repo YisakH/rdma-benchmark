@@ -9,6 +9,21 @@ char* change(string temp){
   return stc;
 }
 
+myRDMA::myRDMA()
+{
+    for (int i  =0 ; i<3; i++){
+        send_buffer[i] = new char[BufSize];
+        recv_buffer[i] = new char[BufSize];
+    }
+}
+myRDMA::~myRDMA()
+{
+    for (int i  =0 ; i<3; i++){
+        delete(send_buffer[i]);
+        delete(recv_buffer[i]);
+    }
+}
+
 void myRDMA::send_rdma(char* msg, int i){
     RDMA rdma;
     TCP tcp;
@@ -211,17 +226,25 @@ void myRDMA::send_info_change_qp(int socks_cnt){
     }
     cout << "Completely success" << endl;
 }
-void myRDMA::create_rdma_info(int socks_cnt){
+std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>>* myRDMA::create_rdma_info(int socks_cnt){
     RDMA rdma;
     TCP tcp;
     cout << "Creating rdma info...   ";
-    char (*buf)[BufSize];
+    char* buf[3];
     for(int j =0;j<2;j++){
         if(j==1){
-            buf = & recv_buffer[0];
+            buf[0] = recv_buffer[0];
+            buf[1] = recv_buffer[1];
+            buf[2] = recv_buffer[2];
         }
-        else
-            buf = & send_buffer[0];
+        else{
+            buf[0] = send_buffer[0];
+            buf[1] = send_buffer[1];
+            buf[2] = send_buffer[2];
+        }
         for(int i =0;i<socks_cnt;i++){
             struct ibv_context* context = rdma.createContext();
             struct ibv_pd* protection_domain = ibv_alloc_pd(context);
@@ -229,7 +252,7 @@ void myRDMA::create_rdma_info(int socks_cnt){
             struct ibv_cq* completion_queue = ibv_create_cq(context, cq_size, nullptr, nullptr, 0);
             struct ibv_qp* qp = rdma.createQueuePair(protection_domain, completion_queue);
             struct ibv_mr *mr = rdma.registerMemoryRegion(protection_domain, 
-                                                    buf[i], sizeof(buf[i]));
+                                                    buf[i], BufSize);
             uint16_t lid = rdma.getLocalId(context, PORT);
             uint32_t qp_num = rdma.getQueuePairNumber(qp);
              rdma_info[j].push_back(make_tuple(context,protection_domain,cq_size,
@@ -237,6 +260,8 @@ void myRDMA::create_rdma_info(int socks_cnt){
         }
     }
     cout << "[ SUCCESS ]" << endl;
+
+    return rdma_info;
 }
 int myRDMA::cnt_thread(){
     return  thread_cnt;

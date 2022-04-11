@@ -36,13 +36,18 @@ int main(int argc, char* argv[]){
   
   socks_cnt = tcp.s_cnt();
   
-  rdma_benchmark.create_rdma_info(socks_cnt);
+  std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>>* rdmaInfo_ptr = rdma_benchmark.create_rdma_info(socks_cnt);
   rdma_benchmark.send_info_change_qp(socks_cnt);
+
+
 
 
   
   for (int msg_size=1; msg_size<=MAX_MSG_SIZE; msg_size*=2)
-    rdma_benchmark.run_bench_write(socks_cnt, msg_size, isServer);
+    rdma_benchmark.run_bench_write(socks_cnt, msg_size, isServer, rdmaInfo_ptr);
 
 
   /*

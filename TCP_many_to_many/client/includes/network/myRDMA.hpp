@@ -7,16 +7,19 @@
 
 using namespace std;
 
-static std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+class myRDMA{
+    public:
+        std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
                 int, struct ibv_cq*,
                 struct ibv_qp*, struct ibv_mr*,
                 uint16_t, uint32_t>> rdma_info[2];
+        char *send_buffer[3];
+        char *recv_buffer[3];
+        vector<int> sock_idx;
 
-static char send_buffer[3][BufSize];
-static char recv_buffer[3][BufSize];
-static vector<int> sock_idx;
-class myRDMA{
-    public:
+        myRDMA();
+        ~myRDMA();
+
         void send_rdma(char* msg, int i);
         void write_rdma(char *msg, int i);
         void write_rdma_with_imm(char *msg, int i);
@@ -26,7 +29,10 @@ class myRDMA{
         void send_t(int socks_cnt);
         void recv_t(int socks_cnt, const char* opcode);
         void run_chat(int socks_cnt);
-        void create_rdma_info(int socks_cnt);
+        std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
+                int, struct ibv_cq*,
+                struct ibv_qp*, struct ibv_mr*,
+                uint16_t, uint32_t>>* create_rdma_info(int socks_cnt);
         void send_info_change_qp(int socks_cnt);
         void exit_rdma(int socks_cnt);
         int cnt_thread();
