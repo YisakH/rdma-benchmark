@@ -16,6 +16,8 @@ void myRDMA::send_rdma(char* msg, int i){
     RDMA rdma;
     
     strcpy(myrdma.send_buffer[i],msg);
+
+    cout << "전송 준비 완료" << endl;
     
     rdma.post_rdma_send(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i], 
                          sizeof(myrdma.send_buffer[i]), myrdma.qp_key[i].first, myrdma.qp_key[i].second);
@@ -170,7 +172,7 @@ void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, string msg){
     char *ms;
     ms = change(msg);
     thread snd_msg = thread(&myRDMA::rdma_send_msg,myRDMA(),socks_cnt,opcode,ms);
-    myRDMA::recv_t(socks_cnt,opcode);
+    //myRDMA::recv_t(socks_cnt,opcode);
 
     snd_msg.join();
 }
