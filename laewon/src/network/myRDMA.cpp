@@ -160,8 +160,8 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
         cout << "recv_t opcode error" << endl;
         exit(-1);
     }
-    for(int i=0;i<socks_cnt;i++){
-        worker[i].join();
+    while(worker.size() > 0){
+        worker.back().join();
     }
     return 1;
 }
