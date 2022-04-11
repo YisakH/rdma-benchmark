@@ -53,7 +53,7 @@ void myRDMA::write_rdma(char *msg, int i){
     string strnono = qp_key[i].second;
 
     rdma.post_rdma_write(get<4>(rdma_info[0][i]), get<5>(rdma_info[0][i]), send_buffer[i], 
-                         sizeof(send_buffer[i]), qp_key[i].first, qp_key[i].second);
+                         BufSize, qp_key[i].first, qp_key[i].second);
     if(rdma.pollCompletion(get<3>(rdma_info[0][i])) ==true){
         cout << "send success" << endl;
         tcp.send_msg("1", sock_idx[i]);
@@ -83,7 +83,7 @@ void myRDMA::send_recv_rdma(int i, int socks_cnt){
     printf("hello~");
     while(1){
         rdma.post_rdma_recv(get<4>( rdma_info[1][i]), get<5>( rdma_info[1][i]), 
-                            get<3>( rdma_info[1][i]), recv_buffer[i], sizeof( recv_buffer[i]));
+                            get<3>( rdma_info[1][i]), recv_buffer[i], BufSize);
         rdma.pollCompletion(get<3>( rdma_info[1][i]));
         mutx.lock();
 
@@ -219,6 +219,10 @@ void myRDMA::send_info_change_qp(int socks_cnt, std::vector<tuple<
         for(int i=0;i< rdma_info[k].size();i++){
             read_rdma_info = tcp.read_rdma_info( sock_idx[i]);
             //Exchange queue pair state
+
+            string s1 = read_rdma_info.find("qp_num")->second;
+            string s2 = read_rdma_info.find("lid")->second;
+
             rdma.changeQueuePairStateToInit(get<4>( rdma_info[k^1][i]));
             rdma.changeQueuePairStateToRTR(get<4>( rdma_info[k^1][i]), PORT, 
                                            stoi(read_rdma_info.find("qp_num")->second), 
