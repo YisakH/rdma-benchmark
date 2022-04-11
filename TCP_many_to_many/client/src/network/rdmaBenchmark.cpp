@@ -123,7 +123,7 @@ void rdmaBenchmark::bench_write(int socks_cnt, int msg_size, char *msg, std::vec
             strcpy(send_buffer[i],msg);
 
 
-            rdma.post_rdma_write(get<4>(rdma_info[0][i]), get<5>(rdma_info[0][i]), send_buffer[i], 
+            rdma.post_rdma_write_with_imm(get<4>(rdma_info[0][i]), get<5>(rdma_info[0][i]), send_buffer[i], 
                          msg_size, qp_key[i].first, qp_key[i].second);
     
             rdma.pollCompletion(get<3>(rdma_info[0][i]));

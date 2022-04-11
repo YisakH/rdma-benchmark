@@ -176,23 +176,28 @@ void RDMA::post_rdma_write_with_imm(struct ibv_qp *qp, struct ibv_mr *mr, void *
   r_addr.erase(r_addr.find_last_not_of(" \n\r\t")+1);
 
   struct ibv_sge sge = {
-      .addr   = (uint64_t)(uintptr_t)addr, //송신 메모리 영역의 시작 주소
-      .length = length,                    //송신 메모리 영역의 바이트 길이
+      .addr   = (uint64_t)(uintptr_t)addr,
+      .length = length,
       .lkey   = mr->lkey,
   };
 
   struct ibv_send_wr send_wr = {
       .wr_id      = (uint64_t)(uintptr_t)addr,
-      .next       = NULL,
       .sg_list    = &sge,
       .num_sge    = 1,
       .opcode     = IBV_WR_RDMA_WRITE_WITH_IMM,
-      .send_flags = 0,
-      .imm_data   = htonl(0x1234) // 임의의 32비트 값   
+      .imm_data   = rand(),
+      .wr = {
+        .rdma = {
+          .remote_addr = FromString<uint64_t>(r_addr),
+          .rkey = stoul(r_key),
+        }
+      }
   };
 
   struct ibv_send_wr *bad_wr;
   ret = ibv_post_send(qp, &send_wr, &bad_wr);
+  assert(ret == 0);
 }
 
 void RDMA::post_rdma_send(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint32_t length, string r_addr, string r_key)
