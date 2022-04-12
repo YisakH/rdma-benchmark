@@ -8,11 +8,11 @@ class myRDMA{
         void send_rdma(char* msg, int i, int msg_size);
         void write_rdma(char *msg, int i);
         void write_rdma_with_imm(char *msg, int i);
-        int send_recv_rdma(int i, int socks_cnt);
+        int send_recv_rdma(int i, int socks_cnt, int msg_size);
         int write_recv_rdma(int i, int socks_cnt);
         void rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg_size);
         void send_t(int socks_cnt);
-        int recv_t(int socks_cnt, const char* opcode);
+        int recv_t(int socks_cnt, const char* opcode, int msg_size);
         void fucking_rdma(int socks_cnt, const char* opcode, char* msg, int msg_size);
         void create_rdma_info(int socks_cnt);
         void send_info_change_qp(int socks_cnt);

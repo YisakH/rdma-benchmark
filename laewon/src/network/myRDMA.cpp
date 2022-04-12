@@ -57,11 +57,11 @@ void myRDMA::write_rdma_with_imm(char *msg, int i){
         cerr << "send failed" << endl;
     
 }
-int myRDMA::send_recv_rdma(int i, int socks_cnt){
+int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
     RDMA rdma;
 
     rdma.post_rdma_recv(get<4>(myrdma.rdma_info[1][i]), get<5>(myrdma.rdma_info[1][i]), 
-                        get<3>(myrdma.rdma_info[1][i]),myrdma.recv_buffer[i], sizeof(myrdma.recv_buffer[i]));
+                        get<3>(myrdma.rdma_info[1][i]),myrdma.recv_buffer[i], msg_size);
     rdma.pollCompletion(get<3>(myrdma.rdma_info[1][i]));
 
     /*mutx.lock();
@@ -139,11 +139,11 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg
         exit(-1);
     }
 }
-int myRDMA::recv_t(int socks_cnt, const char* opcode){
+int myRDMA::recv_t(int socks_cnt, const char* opcode, int msg_size){
     std::vector<std::thread> worker;
     if (strcmp(opcode,"send") == 0){
         for(int i=0;i<socks_cnt;i++){
-            send_recv_rdma(i, socks_cnt);
+            send_recv_rdma(i, socks_cnt, msg_size);
         }
     }
     else if(strcmp(opcode,"write") == 0){
@@ -154,7 +154,7 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
     }
     else if (strcmp(opcode,"write_with_imm") == 0){
         for(int i=0;i<socks_cnt;i++){
-            send_recv_rdma(i, socks_cnt);
+            send_recv_rdma(i, socks_cnt, msg_size);
             myrdma.thread_cnt++;
         }
     }

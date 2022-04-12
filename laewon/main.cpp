@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
       {
         for (int iter = 0; iter < ITERATION; iter++)
         {
-          myrdma.recv_t(socks_cnt, "send");
+          myrdma.recv_t(socks_cnt, "send", msg_size);
           cerr << "SEND: " << recv_buffer[i] << endl;
         }
       }
