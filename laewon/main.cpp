@@ -91,6 +91,8 @@ int main(int argc, char* argv[]){
       printf("%.3f msg/sec\t%.3f MB/sec\n", msgRate, bandwidth);
       printf("latency : %.3fms\n", latency);
       fflush(stdout);
+
+      delete(msg);
    }
   }
   else{
