@@ -78,13 +78,6 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
 int myRDMA::write_recv_rdma(int i, int socks_cnt){
     TCP tcp;
     int cnt = 0;
-    if(tcp.recv_msg(myrdma.sock_idx[i]) != 0){
-    /*  mutx.lock();
-        cerr << cnt<<": WRITE: recv_buffer[" <<i<<"] = ";
-        printf("%s\n", myrdma.recv_buffer[i]); 
-        mutx.unlock(); */
-        return 1;
-    }
     return 0;
 }
 
@@ -149,13 +142,11 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode, int msg_size){
     else if(strcmp(opcode,"write") == 0){
         for(int i=0;i<socks_cnt;i++){
             write_recv_rdma(i, socks_cnt);
-           // myrdma.thread_cnt++;
         }
     }
     else if (strcmp(opcode,"write_with_imm") == 0){
         for(int i=0;i<socks_cnt;i++){
             send_recv_rdma(i, socks_cnt, msg_size);
-            myrdma.thread_cnt++;
         }
     }
     else{
