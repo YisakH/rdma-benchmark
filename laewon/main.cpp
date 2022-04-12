@@ -62,6 +62,16 @@ int main(int argc, char *argv[])
 
   if (strcmp(argv[2], "s") == 0)
   {
+    time_t timer = time(NULL);
+    struct tm* t = localtime(&timer);
+
+    ifstream writeFile;
+    string date;
+    date = "" + (t->tm_year + 1900) + (t->tm_mon + 1) + t->tm_mday + t->tm_hour + t->tm_min + t->tm_sec;
+    string filename(opcode);
+    filename += date;
+    writeFile.open(filename);
+
     /*
     myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
 
