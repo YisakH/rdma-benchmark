@@ -37,7 +37,7 @@ void myRDMA::write_rdma(char *msg, int i){
     rdma.post_rdma_write(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i], 
                          sizeof(myrdma.send_buffer[i]), myrdma.qp_key[i].first, myrdma.qp_key[i].second);
     if(rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) ==true){
-        cerr << "send success" << endl;
+        //cerr << "send success" << endl;
         //tcp.send_msg("1", myrdma.sock_idx[i]);
     }
     else
@@ -51,7 +51,7 @@ void myRDMA::write_rdma_with_imm(char *msg, int i){
     rdma.post_rdma_write_with_imm(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i], 
                                 sizeof(myrdma.send_buffer[i]), myrdma.qp_key[i].first, myrdma.qp_key[i].second);
     if(rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) ==true){
-        cerr << "send success" << endl;
+        //cerr << "send success" << endl;
     }
     else
         cerr << "send failed" << endl;

@@ -78,9 +78,9 @@ int main(int argc, char *argv[])
       struct timeval start, stop;
       gettimeofday(&start, NULL);
 
-      for (int i = 0; i < ITERATION; i++)
+      for (int iter = 0; iter < ITERATION; iter++)
       {
-        myrdma.fucking_rdma(socks_cnt, "write", "msg", msg_size);
+        myrdma.fucking_rdma(socks_cnt, "write_with", "msg", msg_size);
       }
 
       gettimeofday(&stop, NULL);
