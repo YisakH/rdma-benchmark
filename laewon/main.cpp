@@ -51,7 +51,7 @@ int main(int argc, char* argv[]){
   
   socks_cnt = num_of_server - 1;
 
-  myrdma.set_buffer((char (*) [1024]) send_buffer, (char (*) [1024]) recv_buffer);
+  myrdma.set_buffer((char (*) [BufSize]) send_buffer, (char (*) [BufSize]) recv_buffer);
   myrdma.create_rdma_info(socks_cnt);
   myrdma.send_info_change_qp(socks_cnt);
 
