@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
         {
             memset(send_buffer, msg_size - 1, 'A');
             msg[msg_size - 1] = '\0';
-            int iteration = MAX_SEND_BYTES / msg_size;
+            unsigned int iteration = MAX_SEND_BYTES / msg_size;
             iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
             cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
         for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
-            int iteration = MAX_SEND_BYTES / msg_size;
+            unsigned int iteration = MAX_SEND_BYTES / msg_size;
             iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
             for (int i = 0; i < socks_cnt; i++)
