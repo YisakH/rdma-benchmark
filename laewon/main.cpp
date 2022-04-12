@@ -103,12 +103,14 @@ int main(int argc, char *argv[])
   {
     for (int msg_size = 1; msg_size <= 1048576; msg_size *= 2)
     {
+      cerr << "<-------  " << msg_size << "bytes 벤치마크 테스트 시작-------------->" << endl;
+
       for (int i = 0; i < socks_cnt; i++)
       {
         for (int iter = 0; iter < ITERATION; iter++)
         {
           myrdma.recv_t(socks_cnt, "send", msg_size);
-          cerr << "SEND: " << recv_buffer[i] << endl;
+          //cerr << "SEND: " << recv_buffer[i] << endl;
         }
       }
     }
