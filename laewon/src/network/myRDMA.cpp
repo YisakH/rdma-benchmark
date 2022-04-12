@@ -119,46 +119,42 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg
     if (strcmp(opcode,"send") == 0){
         //cerr << "send_rdma run" <<endl;
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::send_rdma,myRDMA(),msg,i, msg_size));
+            send_rdma(msg, i, msg_size);
         }
     }
     else if(strcmp(opcode,"write") == 0){
         //cerr << "write_rdma run" << endl;
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::write_rdma,myRDMA(),msg,i));
+            write_rdma(msg, i);
         }
     }
     else if(strcmp(opcode,"write_with_imm") == 0){
         //cerr << "write_with_imm_rdma run" <<endl;
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::write_rdma_with_imm,myRDMA(),msg,i));
+            write_rdma_with_imm(msg, i);
         }
     }
     else{
         cerr << "rdma_send_msg opcode error" << endl;
         exit(-1);
     }
-    for(int i=0;i<socks_cnt;i++){
-        worker[i].join();
-    }
 }
 int myRDMA::recv_t(int socks_cnt, const char* opcode){
     std::vector<std::thread> worker;
     if (strcmp(opcode,"send") == 0){
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::send_recv_rdma,myRDMA(),i,socks_cnt));
-            myrdma.thread_cnt++;
+            send_recv_rdma(i, socks_cnt);
         }
     }
     else if(strcmp(opcode,"write") == 0){
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::write_recv_rdma,myRDMA(),i,socks_cnt));
+            write_recv_rdma(i, socks_cnt);
            // myrdma.thread_cnt++;
         }
     }
     else if (strcmp(opcode,"write_with_imm") == 0){
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::send_recv_rdma,myRDMA(),i,socks_cnt));
+            send_recv_rdma(i, socks_cnt);
             myrdma.thread_cnt++;
         }
     }
@@ -166,19 +162,15 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
         cerr << "recv_t opcode error" << endl;
         exit(-1);
     }
-    for(int i=0;i<socks_cnt;i++){
-        worker[i].join();
-    }
     return 1;
 }
 
 void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, char* msg, int msg_size){
     //char *ms;
     //ms = change(msg);
-    thread snd_msg = thread(&myRDMA::rdma_send_msg,myRDMA(),socks_cnt,opcode,msg, msg_size);
+    rdma_send_msg(socks_cnt, opcode, msg, msg_size);
     //myRDMA::recv_t(socks_cnt,opcode);
 
-    snd_msg.join();
 }
 
 void myRDMA::send_info_change_qp(int socks_cnt){
