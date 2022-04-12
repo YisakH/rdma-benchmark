@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
       for (int iter = 0; iter < ITERATION; iter++)
       {
-        myrdma.fucking_rdma(socks_cnt, "send", "msg", msg_size);
+        myrdma.fucking_rdma(socks_cnt, "write", "msg", msg_size);
       }
 
       gettimeofday(&stop, NULL);
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
       {
         for (int iter = 0; iter < ITERATION; iter++)
         {
-          myrdma.recv_t(socks_cnt, "send", msg_size);
+          myrdma.recv_t(socks_cnt, "write", msg_size);
           //cerr << "SEND: " << recv_buffer[i] << endl;
         }
       }
