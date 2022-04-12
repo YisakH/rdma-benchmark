@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 class myRDMA{
     public:
         std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
@@ -19,6 +20,9 @@ class myRDMA{
 
         myRDMA();
         ~myRDMA();
+        char send_buffer[3][BufSize];
+        char recv_buffer[3][BufSize];
+        vector<int> sock_idx;
 
         void send_rdma(char* msg, int i);
         void write_rdma(char *msg, int i);
