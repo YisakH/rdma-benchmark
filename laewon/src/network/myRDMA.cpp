@@ -77,7 +77,7 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
 
 int myRDMA::write_recv_rdma(int i, int socks_cnt, int msg_size){
     
-    usleep(1000);
+    usleep(100);
     return 0;
 }
 
