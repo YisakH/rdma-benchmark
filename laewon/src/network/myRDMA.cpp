@@ -12,21 +12,21 @@ char* change(string temp){
   return stc;
 }
 
-void myRDMA::send_rdma(char* msg, int i){
+void myRDMA::send_rdma(char* msg, int i, int msg_size){
     RDMA rdma;
     
     strcpy(myrdma.send_buffer[i],msg);
 
-    cout << "전송 준비 완료" << endl;
+    cerr << "전송 준비 완료" << endl;
     
     rdma.post_rdma_send(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i], 
-                         sizeof(myrdma.send_buffer[i]), myrdma.qp_key[i].first, myrdma.qp_key[i].second);
+                         msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
     if(rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) == true){
-        cout << "send success" << endl;
+        cerr << "send success" << endl;
         
     }
     else
-        cout << "send failed" << endl;
+        cerr << "send failed" << endl;
 }
 void myRDMA::write_rdma(char *msg, int i){
     RDMA rdma;
@@ -88,6 +88,7 @@ int myRDMA::write_recv_rdma(int i, int socks_cnt){
     return 0;
 }
 
+
 void myRDMA::send_t(int socks_cnt){
     char msg[BufSize];
 
@@ -99,7 +100,7 @@ void myRDMA::send_t(int socks_cnt){
         }*/
 
         for(int i=0;i<socks_cnt;i++){
-            myRDMA::send_rdma(msg,i);
+            myRDMA::send_rdma(msg,i, BufSize);
         }
 
         if(strcmp(msg,"exit\n")==0){
@@ -108,17 +109,17 @@ void myRDMA::send_t(int socks_cnt){
         }
     }
 }
-void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg){
+
+
+void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg_size){
     //char mmsg[BufSize];
     //fgets(mmsg,BufSize,stdin);
     std::vector<std::thread> worker;
 
-    cout << "hello" <<endl;
-
     if (strcmp(opcode,"send") == 0){
-        cout << "send_rdma run" <<endl;
+        cerr << "send_rdma run" <<endl;
         for(int i=0;i<socks_cnt;i++){
-            worker.push_back(std::thread(&myRDMA::send_rdma,myRDMA(),msg,i));
+            worker.push_back(std::thread(&myRDMA::send_rdma,myRDMA(),msg,i, msg_size));
         }
     }
     else if(strcmp(opcode,"write") == 0){
@@ -171,10 +172,10 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
     return 1;
 }
 
-void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, char* msg){
+void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, char* msg, int msg_size){
     //char *ms;
     //ms = change(msg);
-    thread snd_msg = thread(&myRDMA::rdma_send_msg,myRDMA(),socks_cnt,opcode,msg);
+    thread snd_msg = thread(&myRDMA::rdma_send_msg,myRDMA(),socks_cnt,opcode,msg, msg_size);
     //myRDMA::recv_t(socks_cnt,opcode);
 
     snd_msg.join();
