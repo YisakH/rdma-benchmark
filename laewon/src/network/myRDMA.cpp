@@ -28,14 +28,14 @@ void myRDMA::send_rdma(char* msg, int i, int msg_size){
     else
         cerr << "send failed" << endl;
 }
-void myRDMA::write_rdma(char *msg, int i){
+void myRDMA::write_rdma(char *msg, int i, int msg_size){
     RDMA rdma;
     TCP tcp;
    
-    strcpy(myrdma.send_buffer[i],msg);
+    //strcpy(myrdma.send_buffer[i],msg);
     
     rdma.post_rdma_write(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i], 
-                         sizeof(myrdma.send_buffer[i]), myrdma.qp_key[i].first, myrdma.qp_key[i].second);
+                         msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
     if(rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) ==true){
         //cerr << "send success" << endl;
         //tcp.send_msg("1", myrdma.sock_idx[i]);
@@ -43,13 +43,13 @@ void myRDMA::write_rdma(char *msg, int i){
     else
         cerr << "send failed" << endl;
 }
-void myRDMA::write_rdma_with_imm(char *msg, int i){
+void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size){
     RDMA rdma;
 
     strcpy(myrdma.send_buffer[i],msg);
     
     rdma.post_rdma_write_with_imm(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i], 
-                                sizeof(myrdma.send_buffer[i]), myrdma.qp_key[i].first, myrdma.qp_key[i].second);
+                                msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
     if(rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) ==true){
         //cerr << "send success" << endl;
     }
@@ -75,7 +75,7 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
     return 1;
 }
 
-int myRDMA::write_recv_rdma(int i, int socks_cnt){
+int myRDMA::write_recv_rdma(int i, int socks_cnt, int msg_size){
     
     usleep(1000);
     return 0;
@@ -118,13 +118,13 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg
     else if(strcmp(opcode,"write") == 0){
         //cerr << "write_rdma run" << endl;
         for(int i=0;i<socks_cnt;i++){
-            write_rdma(msg, i);
+            write_rdma(msg, i, msg_size);
         }
     }
     else if(strcmp(opcode,"write_with_imm") == 0){
         //cerr << "write_with_imm_rdma run" <<endl;
         for(int i=0;i<socks_cnt;i++){
-            write_rdma_with_imm(msg, i);
+            write_rdma_with_imm(msg, i, msg_size);
         }
     }
     else{
@@ -141,7 +141,7 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode, int msg_size){
     }
     else if(strcmp(opcode,"write") == 0){
         for(int i=0;i<socks_cnt;i++){
-            write_recv_rdma(i, socks_cnt);
+            write_recv_rdma(i, socks_cnt, msg_size);
         }
     }
     else if (strcmp(opcode,"write_with_imm") == 0){

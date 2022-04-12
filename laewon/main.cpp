@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     for (int msg_size = 1; msg_size <= 1048576; msg_size *= 2)
     {
-      memset(msg, msg_size - 1, 'A');
+      memset(send_buffer, msg_size - 1, 'A');
       msg[msg_size - 1] = '\0';
       int iteration = TOTAL_SEND_BYTES / msg_size;
 
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 
       for (int iter = 0; iter < ITERATION; iter++)
       {
-        myrdma.fucking_rdma(socks_cnt, "write", "msg", msg_size);
+        myrdma.fucking_rdma(socks_cnt, "write_with_imm", "msg", msg_size);
       }
 
       gettimeofday(&stop, NULL);
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
       {
         for (int iter = 0; iter < ITERATION; iter++)
         {
-          myrdma.recv_t(socks_cnt, "write", msg_size);
+          myrdma.recv_t(socks_cnt, "write_with_imm", msg_size);
           //cerr << "SEND: " << recv_buffer[i] << endl;
         }
       }
