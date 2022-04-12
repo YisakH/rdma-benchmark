@@ -25,11 +25,15 @@ char msg[BufSize - 1];
 
 int main(int argc, char *argv[])
 {
-  if (argc != 3)
+  if (argc != 4)
   {
     cout << argv[0] << " <MY IP> " << endl;
     exit(1);
   }
+
+  char *opcode = argv[3];
+
+
   TCP tcp;
   myRDMA myrdma;
   int socks_cnt;
@@ -78,7 +82,7 @@ int main(int argc, char *argv[])
 
       for (int iter = 0; iter < ITERATION; iter++)
       {
-        myrdma.fucking_rdma(socks_cnt, "write_with_imm", "msg", msg_size);
+        myrdma.fucking_rdma(socks_cnt, opcode, "msg", msg_size);
       }
 
       gettimeofday(&stop, NULL);
@@ -108,7 +112,7 @@ int main(int argc, char *argv[])
       {
         for (int iter = 0; iter < ITERATION; iter++)
         {
-          myrdma.recv_t(socks_cnt, "write_with_imm", msg_size);
+          myrdma.recv_t(socks_cnt, opcode, msg_size);
           //cerr << "SEND: " << recv_buffer[i] << endl;
         }
       }
