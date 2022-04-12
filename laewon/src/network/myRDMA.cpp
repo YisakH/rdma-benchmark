@@ -171,10 +171,10 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode){
     return 1;
 }
 
-void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, string msg){
-    char *ms;
-    ms = change(msg);
-    thread snd_msg = thread(&myRDMA::rdma_send_msg,myRDMA(),socks_cnt,opcode,ms);
+void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, char* msg){
+    //char *ms;
+    //ms = change(msg);
+    thread snd_msg = thread(&myRDMA::rdma_send_msg,myRDMA(),socks_cnt,opcode,msg);
     //myRDMA::recv_t(socks_cnt,opcode);
 
     snd_msg.join();

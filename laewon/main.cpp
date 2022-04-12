@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
       char *msg = new char[msg_size];
       memset(msg, msg_size-1, 'A');
       msg[msg_size-1] = '\0';
-
+      
       struct timeval start, stop;
 		  gettimeofday(&start, NULL);
 
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]){
       printf("latency : %.3fms\n", latency);
       fflush(stdout);
 
-      delete(msg);
+      delete [] msg;
    }
   }
   else{
