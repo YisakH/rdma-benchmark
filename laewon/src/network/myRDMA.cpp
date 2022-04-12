@@ -70,6 +70,7 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt){
     printf("%s\n", myrdma.recv_buffer[i]);
 
     mutx.unlock();*/
+    cout << myrdma.recv_buffer[i] << endl;
     
     return 1;
 }
