@@ -12,7 +12,7 @@ int TCP::recv_msg(int ip){
    char msg[BUF_SIZE];
    int str_len;
    str_len=read(tcp->new_sock[ip], msg, 100);
-   //cout << str_len << endl;
+   //cerr << str_len << endl;
    return str_len;
 }
 void TCP::server(const char* server[]){
@@ -25,11 +25,11 @@ void TCP::server(const char* server[]){
    serv_adr.sin_port=htons(PORT1);
 
    if(bind(serv_sock, (struct sockaddr*) &serv_adr, sizeof(serv_adr))==-1){
-      std::cout << "bind() error" << std::endl;
+      std::cerr << "bind() error" << std::endl;
       exit(1);
    }
    if(listen(serv_sock, 5)==-1){
-      std::cout << "listen() error" << std::endl;
+      std::cerr << "listen() error" << std::endl;
       exit(1);
    }
    while(1)
@@ -88,7 +88,7 @@ void TCP::connect_tcp(const char* ip, const char* server[]){
    TCP::client_t(ip, server);
    serv.join();
   
-  cout << "TCP :: connect_tcp complete" << endl;
+  cerr << "TCP :: connect_tcp complete" << endl;
 }
 map<string, string> TCP::read_rdma_info(int ip){
    map<string, string> info;
