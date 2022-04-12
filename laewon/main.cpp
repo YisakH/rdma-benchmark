@@ -5,6 +5,7 @@
 
 #define num_of_server 2
 #define TOTAL_SEND_BYTES 1073741824 // 1GB
+#define ITERATION 1000
 
 const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
 
@@ -75,7 +76,7 @@ int main(int argc, char *argv[])
       struct timeval start, stop;
       gettimeofday(&start, NULL);
 
-      for (int iter = 0; iter < iteration; iter++)
+      for (int iter = 0; iter < ITERATION; iter++)
       {
         myrdma.fucking_rdma(socks_cnt, "write", "msg", msg_size);
       }
@@ -86,9 +87,9 @@ int main(int argc, char *argv[])
       printf("total time : %ld\n", time);
       double msec = ((double)time) / 1000000L * 1000;
 
-      double msgRate = ((double)(iteration * 1000000L)) / time;
-      double bandwidth = ((double)(iteration * msg_size)) / (1024 * 1024) / (((double)time) / 1000000L);
-      double latency = ((double)msec) / iteration;
+      double msgRate = ((double)(ITERATION * 1000000L)) / time;
+      double bandwidth = ((double)(ITERATION * msg_size)) / (1024 * 1024) / (((double)time) / 1000000L);
+      double latency = ((double)msec) / ITERATION;
       printf("%.3f msg/sec\t%.3f MB/sec\n", msgRate, bandwidth);
       printf("latency : %.3fms\n", latency);
       fflush(stdout);
@@ -105,7 +106,7 @@ int main(int argc, char *argv[])
 
       for (int i = 0; i < socks_cnt; i++)
       {
-        for (int iter = 0; iter < iteration; iter++)
+        for (int iter = 0; iter < ITERATION; iter++)
         {
           myrdma.recv_t(socks_cnt, "write", msg_size);
           //cerr << "SEND: " << recv_buffer[i] << endl;
