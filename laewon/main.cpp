@@ -67,7 +67,8 @@ int main(int argc, char *argv[])
 
     ifstream writeFile;
     string date;
-    date = "" + (t->tm_year + 1900) + (t->tm_mon + 1) + t->tm_mday + t->tm_hour + t->tm_min + t->tm_sec;
+    date = "" + to_string(t->tm_year + 1900) + to_string(t->tm_mon + 1) + to_string(t->tm_mday) + to_string(t->tm_hour) + 
+                to_string(t->tm_min) + to_string(t->tm_sec);
     string filename(opcode);
     filename += date;
     writeFile.open(filename);
