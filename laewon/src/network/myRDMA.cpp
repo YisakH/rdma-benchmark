@@ -76,8 +76,8 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
 }
 
 int myRDMA::write_recv_rdma(int i, int socks_cnt){
-    TCP tcp;
-    int cnt = 0;
+    
+    sleep(1);
     return 0;
 }
 
