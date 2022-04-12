@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
       memset(send_buffer, msg_size - 1, 'A');
       msg[msg_size - 1] = '\0';
       int iteration = TOTAL_SEND_BYTES / msg_size;
+      iteration = (iteration > 100000000) ? 10000000 : iteration;
 
       cerr << "<---- " << opcode  << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
 
@@ -92,9 +93,9 @@ int main(int argc, char *argv[])
       printf("total time : %ld\n", time);
       double msec = ((double)time) / 1000000L * 1000;
 
-      double msgRate = ((double)(ITERATION * 1000000L)) / time;
-      double bandwidth = ((double)(ITERATION * msg_size)) / (1024 * 1024) / (((double)time) / 1000000L);
-      double latency = ((double)msec) / ITERATION;
+      double msgRate = ((double)(iteration * 1000000L)) / time;
+      double bandwidth = ((double)(iteration * msg_size)) / (1024 * 1024) / (((double)time) / 1000000L);
+      double latency = ((double)msec) / iteration;
       printf("%.3f msg/sec\t%.3f MB/sec\n", msgRate, bandwidth);
       printf("latency : %.3fms\n", latency);
       fflush(stdout);
@@ -108,10 +109,11 @@ int main(int argc, char *argv[])
     {
       cerr << "<---- " << opcode  << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
       int iteration = TOTAL_SEND_BYTES / msg_size;
+      iteration = (iteration > 100000000) ? 10000000 : iteration;
 
       for (int i = 0; i < socks_cnt; i++)
       {
-        for (int iter = 0; iter < ITERATION; iter++)
+        for (int iter = 0; iter < iteration; iter++)
         {
           myrdma.recv_t(socks_cnt, opcode, msg_size);
           //cerr << "SEND: " << recv_buffer[i] << endl;
