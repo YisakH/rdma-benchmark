@@ -5,6 +5,7 @@
 
 #define num_of_server 2
 #define TOTAL_SEND_BYTES 1073741824 // 1GB
+#define MAX_MSG_SIZE 1048576
 #define ITERATION 1000
 
 const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
@@ -69,13 +70,13 @@ int main(int argc, char *argv[])
     }
     */
 
-    for (int msg_size = 1; msg_size <= 1048576; msg_size *= 2)
+    for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
     {
       memset(send_buffer, msg_size - 1, 'A');
       msg[msg_size - 1] = '\0';
       int iteration = TOTAL_SEND_BYTES / msg_size;
 
-      cerr << "<-------  " << msg_size << "bytes 벤치마크 테스트 시작-------------->" << endl;
+      cerr << "<---- " << opcode  << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
 
       struct timeval start, stop;
       gettimeofday(&start, NULL);
@@ -103,9 +104,9 @@ int main(int argc, char *argv[])
   }
   else
   {
-    for (int msg_size = 1; msg_size <= 1048576; msg_size *= 2)
+    for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
     {
-      cerr << "<-------  " << msg_size << "bytes 벤치마크 테스트 시작-------------->" << endl;
+      cerr << "<---- " << opcode  << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
       int iteration = TOTAL_SEND_BYTES / msg_size;
 
       for (int i = 0; i < socks_cnt; i++)
