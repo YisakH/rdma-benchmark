@@ -89,11 +89,7 @@ int main(int argc, char *argv[])
           cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
         }
         */
-
-        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
-        {
-            memset(send_buffer, msg_size - 1, 'A');
-            msg[msg_size - 1] = '\0';
+       int msg_size = 1;
             long long iteration = MAX_SEND_BYTES / msg_size;
             iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
@@ -102,12 +98,9 @@ int main(int argc, char *argv[])
             struct timeval start, stop;
             gettimeofday(&start, NULL);
 
-            for (int iter = 0; iter < iteration; iter++)
-            {
-                myrdma.fucking_rdma(socks_cnt, opcode, "msg", msg_size);
-            }
 
-            gettimeofday(&stop, NULL);
+            myrdma.fucking_rdma(socks_cnt, opcode, "msg", msg_size);
+
 
             uint64_t time = timeDiff(stop, start);
             printf("total time : %ld\n", time);
@@ -120,7 +113,7 @@ int main(int argc, char *argv[])
             printf("latency : %.3fms\n", latency);
             fflush(stdout);
 
-            // delete [] msg;
+
 
             
             char send_data[100];
@@ -128,28 +121,7 @@ int main(int argc, char *argv[])
             writeFile.write(send_data, strlen(send_data));
 
 
-        }
-
         writeFile.close();
-    }
-    else
-    {
-        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
-        {
-            cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
-            long long iteration = MAX_SEND_BYTES / msg_size;
-            iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
-
-            for (int i = 0; i < socks_cnt; i++)
-            {
-                for (int iter = 0; iter < iteration; iter++)
-                {
-                    myrdma.recv_t(socks_cnt, opcode, msg_size);
-                    // cerr << "SEND: " << recv_buffer[i] << endl;
-                }
-            }
-        }
-    }
 
     // sleep(10);
     myrdma.exit_rdma(socks_cnt);
