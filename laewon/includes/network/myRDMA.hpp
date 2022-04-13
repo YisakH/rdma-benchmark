@@ -7,6 +7,8 @@ class myRDMA{
     public:
         void send_rdma(char* msg, int i, int msg_size);
         void write_rdma(char *msg, int i, int msg_size);
+        void read_rdma(char *msg, int i, int msg_size);
+        int read_recv_rdma(int i, int socks_cnt, int msg_size);
         void write_rdma_with_imm(char *msg, int i, int msg_size);
         int send_recv_rdma(int i, int socks_cnt, int msg_size);
         int write_recv_rdma(int i, int socks_cnt, int msg_size);

@@ -28,6 +28,7 @@ void myRDMA::send_rdma(char* msg, int i, int msg_size){
     else
         cerr << "send failed" << endl;
 }
+
 void myRDMA::write_rdma(char *msg, int i, int msg_size){
     RDMA rdma;
     TCP tcp;
@@ -43,6 +44,23 @@ void myRDMA::write_rdma(char *msg, int i, int msg_size){
     else
         cerr << "send failed" << endl;
 }
+
+void myRDMA::read_rdma(char *msg, int i, int msg_size){
+    RDMA rdma;
+    TCP tcp;
+   
+    //strcpy(myrdma.send_buffer[i],msg);
+    
+    rdma.post_rdma_read(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i], 
+                         msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
+    if(rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) ==true){
+        //cerr << "send success" << endl;
+        //tcp.send_msg("1", myrdma.sock_idx[i]);
+    }
+    else
+        cerr << "read failed" << endl;
+}
+
 void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size){
     RDMA rdma;
 
@@ -76,6 +94,12 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
 }
 
 int myRDMA::write_recv_rdma(int i, int socks_cnt, int msg_size){
+    
+    usleep(10);
+    return 0;
+}
+
+int myRDMA::read_recv_rdma(int i, int socks_cnt, int msg_size){
     
     usleep(10);
     return 0;
@@ -127,6 +151,11 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg
             write_rdma_with_imm(msg, i, msg_size);
         }
     }
+    else if(strcmp(opcode, "read") == 0){
+        for(int i=0; i<socks_cnt; i++){
+
+        }
+    }
     else{
         cerr << "rdma_send_msg opcode error" << endl;
         exit(-1);
@@ -147,6 +176,11 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode, int msg_size){
     else if (strcmp(opcode,"write_with_imm") == 0){
         for(int i=0;i<socks_cnt;i++){
             send_recv_rdma(i, socks_cnt, msg_size);
+        }
+    }
+    else if (strcmp(opcode,"read") == 0){
+        for(int i=0;i<socks_cnt;i++){
+            read_recv_rdma(i, socks_cnt, msg_size);
         }
     }
     else{
