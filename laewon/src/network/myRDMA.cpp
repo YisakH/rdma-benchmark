@@ -129,8 +129,7 @@ void myRDMA::send_t(int socks_cnt){
 
 
 void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg_size){
-    //char mmsg[BufSize];
-    //fgets(mmsg,BufSize,stdin);
+
     std::vector<std::thread> worker;
 
     if (strcmp(opcode,"send") == 0){
