@@ -56,6 +56,6 @@
         "typeinfo": "cpp"
     },
     "cmake.debugConfig": {
-        "args": ["192.168.1.100", "s", "write"]
+        "args": ["192.168.1.100", "s", "write_with_imm"]
     }
 }

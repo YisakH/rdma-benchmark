@@ -72,12 +72,13 @@ int main(int argc, char *argv[])
                 to_string(t->tm_min) + to_string(t->tm_sec);
         string filename(opcode);
         filename += date;
+        filename += ".txt";
         writeFile.open(filename);
 
         if(!writeFile.is_open()){
             cerr << "file open error" << endl;
         }
-        char *tmp = "M_Size #_of_Msg throughput latency";
+        char *tmp = "M_Size #_of_Msg throughput latency\n";
         writeFile.write(tmp, strlen(tmp));
 
         /*
@@ -92,7 +93,7 @@ int main(int argc, char *argv[])
         {
             memset(send_buffer, msg_size - 1, 'A');
             msg[msg_size - 1] = '\0';
-            unsigned int iteration = MAX_SEND_BYTES / msg_size;
+            long long iteration = MAX_SEND_BYTES / msg_size;
             iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
             cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
@@ -135,7 +136,7 @@ int main(int argc, char *argv[])
         for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
-            unsigned int iteration = MAX_SEND_BYTES / msg_size;
+            long long iteration = MAX_SEND_BYTES / msg_size;
             iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
             for (int i = 0; i < socks_cnt; i++)

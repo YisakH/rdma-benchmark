@@ -34,6 +34,7 @@ class RDMA{
         bool changeQueuePairStateToRTS(struct ibv_qp* queue_pair);
         struct ibv_mr* registerMemoryRegion(struct ibv_pd* pd, void* buffer, size_t size);
         void post_rdma_write(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint32_t length, string r_addr, string r_key);
+        void post_rdma_read(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint32_t length, string r_addr, string r_key);
         void post_rdma_send(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint32_t length, string r_addr, string r_key);
         void post_rdma_write_with_imm(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint32_t length, string r_addr, string r_key);
         void post_rdma_recv(struct ibv_qp *qp, struct ibv_mr *mr, struct ibv_cq *cq, void *addr, uint32_t length);

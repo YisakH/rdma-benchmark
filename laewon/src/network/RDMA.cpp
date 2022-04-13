@@ -174,6 +174,42 @@ void RDMA::post_rdma_write(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uin
   //printf("post rdma write wr: imm_data=0x%08x, byte_len=%u\n", send_wr.imm_data, length);
 }
 
+void RDMA::post_rdma_read(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint32_t length, string r_addr, string r_key)
+{
+  int ret;
+  r_addr.erase(r_addr.find_last_not_of(" \n\r\t")+1);
+
+  struct ibv_sge sge = {
+      .addr   = (uint64_t)(uintptr_t)addr,
+      .length = length,
+      .lkey   = mr->lkey,
+  };
+
+  struct ibv_send_wr send_wr = {
+      .wr_id      = (uint64_t)(uintptr_t)addr,
+      .sg_list    = &sge,
+      .num_sge    = 1,
+      .opcode     = IBV_WR_RDMA_READ,
+      .imm_data   = rand(),
+      .wr = {
+        .rdma = {
+          .remote_addr = FromString<uint64_t>(r_addr),
+          .rkey = stoul(r_key),
+        }
+      }
+  };
+
+  struct ibv_send_wr *bad_wr;
+  ret = ibv_post_send(qp, &send_wr, &bad_wr);
+  if(ret){
+    fprintf(stderr, "Error, ibv_post_read() failed\n");
+	  exit(1);
+  }
+  assert(ret == 0);
+
+  //printf("post rdma write wr: imm_data=0x%08x, byte_len=%u\n", send_wr.imm_data, length);
+}
+
 void RDMA::post_rdma_write_with_imm(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint32_t length, string r_addr, string r_key)
 {
   int ret;
