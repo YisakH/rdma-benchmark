@@ -5,7 +5,7 @@
 
 #define num_of_server 2
 #define MAX_SEND_BYTES static_cast<long>(10737418240) // 10GB
-#define MAX_MSG_SIZE 1048576
+#define MAX_MSG_SIZE 10485760
 #define MAX_ITERATION 1000000
 
 const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
                 to_string(t->tm_hour) +
                 to_string(t->tm_min) + to_string(t->tm_sec);
         string filename(opcode);
+        filename = "./logs/" + filename;
         filename += date;
         filename += ".txt";
         writeFile.open(filename);

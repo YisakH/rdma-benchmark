@@ -153,7 +153,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg
     }
     else if(strcmp(opcode, "read") == 0){
         for(int i=0; i<socks_cnt; i++){
-
+            read_rdma(msg, i, msg_size);
         }
     }
     else{

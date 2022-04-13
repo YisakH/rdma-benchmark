@@ -1,4 +1,4 @@
-#define BufSize 1048580
+#define BufSize 10485800
 #include <vector>
 #include <string>
 
