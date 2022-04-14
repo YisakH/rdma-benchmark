@@ -224,6 +224,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
                 worker.back().join();
                 worker.pop_back();
             }
+            sleep(2);
         }
     }
     else if (strcmp(opcode, "write") == 0)
@@ -238,6 +239,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
                 worker.back().join();
                 worker.pop_back();
             }
+            sleep(2);
         }
     }
     else if (strcmp(opcode, "write_with_imm") == 0)
@@ -253,6 +255,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
                 worker.back().join();
                 worker.pop_back();
             }
+            sleep(2);
         }
     }
     else if (strcmp(opcode, "read") == 0)
@@ -268,6 +271,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
                 worker.back().join();
                 worker.pop_back();
             }
+            sleep(2);
         }
     }
     else
