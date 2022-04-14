@@ -10,7 +10,6 @@
 
 const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
 
-
 // static char *send_buffer[num_of_server];
 // static char *recv_buffer[num_of_server];
 
@@ -55,47 +54,42 @@ int main(int argc, char *argv[])
 
     cout << "======================================================" << endl;
 
-    if (strcmp(argv[2], "s") == 0)
+    time_t timer = time(NULL);
+    struct tm *t = localtime(&timer);
+
+    ofstream writeFile;
+    string date;
+    date = "" + to_string(t->tm_year - 100) + "0" + to_string(t->tm_mon + 1) + to_string(t->tm_mday) +
+           "_" +
+           to_string(t->tm_hour) +
+           to_string(t->tm_min) + to_string(t->tm_sec);
+    string filename(opcode);
+    filename = "./logs/" + filename;
+    filename += date;
+    filename += ".txt";
+    writeFile.open(filename);
+
+    if (!writeFile.is_open())
     {
-        time_t timer = time(NULL);
-        struct tm *t = localtime(&timer);
-
-        ofstream writeFile;
-        string date;
-        date = "" + to_string(t->tm_year - 100) + "0" + to_string(t->tm_mon + 1) + to_string(t->tm_mday) +
-               "_" +
-               to_string(t->tm_hour) +
-               to_string(t->tm_min) + to_string(t->tm_sec);
-        string filename(opcode);
-        filename = "./logs/" + filename;
-        filename += date;
-        filename += ".txt";
-        writeFile.open(filename);
-
-        if (!writeFile.is_open())
-        {
-            cerr << "file open error" << endl;
-        }
-        char *tmp = "M_Size #_of_Msg throughput latency\n";
-        writeFile.write(tmp, strlen(tmp));
-
-        /*
-        myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
-
-        for(int i = 0; i<socks_cnt;i++){
-          cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
-        }
-        */
-
-        myrdma.fucking_rdma(socks_cnt, opcode, "msg", 1);
-
-
-        writeFile.close();
-
-        // sleep(10);
-        myrdma.exit_rdma(socks_cnt);
-
+        cerr << "file open error" << endl;
     }
-    
+    char *tmp = "M_Size #_of_Msg throughput latency\n";
+    writeFile.write(tmp, strlen(tmp));
+
+    /*
+    myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
+
+    for(int i = 0; i<socks_cnt;i++){
+      cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
+    }
+    */
+
+    myrdma.fucking_rdma(socks_cnt, opcode, "msg", 1);
+
+    writeFile.close();
+
+    // sleep(10);
+    myrdma.exit_rdma(socks_cnt);
+
     return 0;
 }
