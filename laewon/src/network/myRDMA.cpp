@@ -209,12 +209,6 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         exit(-1);
     }
 
-    printf("%d size\n", worker.size());
-    for (int i = 0; i < socks_cnt; i++)
-    {
-        worker[i].join();
-    }
-
     for (int mSize_index = 0; mSize_index < bench_time[0].size(); mSize_index++)
     {
         int msg_size = 1 << mSize_index;
