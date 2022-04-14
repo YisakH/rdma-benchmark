@@ -218,6 +218,9 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
             uint64_t time = timeDiff(bench_time[thread_index][mSize_index].second, bench_time[thread_index][mSize_index].first);
             total_time += time;
         }
+
+        cerr << "<---- send : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
+        
         total_time /= socks_cnt;
         printf("total time : %ld\n", total_time);
         double msec = ((double)total_time) / 1000000L * 1000;
