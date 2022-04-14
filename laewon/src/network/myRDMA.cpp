@@ -208,6 +208,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
 
     for (int mSize_index = 0; mSize_index < bench_time[0].size(); mSize_index++)
     {
+        int msg_size = 1 << mSize_index;
         long long iteration = MAX_SEND_BYTES / msg_size;
         iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
