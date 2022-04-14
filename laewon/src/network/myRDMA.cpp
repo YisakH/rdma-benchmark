@@ -5,8 +5,8 @@
 #include <sys/time.h>
 
 #define MAX_SEND_BYTES static_cast<long>(10737418240) // 10GB
-#define MAX_MSG_SIZE 1024
-#define MAX_ITERATION 1000000
+#define MAX_MSG_SIZE 256
+#define MAX_ITERATION 1000
 
 uint64_t timeDiff(struct timeval stop, struct timeval start)
 {
