@@ -281,7 +281,8 @@ int myRDMA::recv_t(int socks_cnt, const char *opcode, int msg_size)
         cerr << "recv_t opcode error" << endl;
         exit(-1);
     }
-    for (int i = 0; i < socks_cnt; i++)
+    printf("%d worker is created\n", worker.size());
+    for (int i = 0; i < worker.size(); i++)
     {
         worker[i].join();
     }
