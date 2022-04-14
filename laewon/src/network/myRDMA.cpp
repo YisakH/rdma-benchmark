@@ -66,30 +66,55 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
     gettimeofday(&(bench_time->back().second), NULL);
 }
 
-void myRDMA::write_rdma(char *msg, int i, int msg_size)
+void myRDMA::write_rdma(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time)
 {
     RDMA rdma;
-    TCP tcp;
 
-    // strcpy(myrdma.send_buffer[i],msg);
+    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", i, msg_size);
 
-    rdma.post_rdma_write(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i],
-                         msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
-    if (rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) == true)
+    struct timeval start, end;
+    bench_time->push_back({start, end});
+
+    long long iteration = MAX_SEND_BYTES / msg_size;
+    iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
+
+    gettimeofday(&(bench_time->back().first), NULL);
+
+    strcpy(myrdma.send_buffer[i], msg);
+
+    for (int iter = 0; iter < iteration; iter++)
     {
-        // cerr << "send success" << endl;
-        // tcp.send_msg("1", myrdma.sock_idx[i]);
+        rdma.post_rdma_write(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i],
+                             msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
+        if (rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) == true)
+        {
+            // cerr << "send success" << endl;
+            // tcp.send_msg("1", myrdma.sock_idx[i]);
+        }
+        else
+            cerr << "send failed" << endl;
     }
-    else
-        cerr << "send failed" << endl;
+
+    gettimeofday(&(bench_time->back().second), NULL);
 }
 
-void myRDMA::read_rdma(char *msg, int i, int msg_size)
+void myRDMA::read_rdma(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time)
 {
     RDMA rdma;
-    TCP tcp;
+    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", i, msg_size);
 
-    // strcpy(myrdma.send_buffer[i],msg);
+    struct timeval start, end;
+    bench_time->push_back({start, end});
+
+    long long iteration = MAX_SEND_BYTES / msg_size;
+    iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
+
+    gettimeofday(&(bench_time->back().first), NULL);
+
+    strcpy(myrdma.send_buffer[i], msg);
+
+    for (int iter = 0; iter < iteration; iter++)
+    {
 
     rdma.post_rdma_read(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i],
                         msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
@@ -100,6 +125,8 @@ void myRDMA::read_rdma(char *msg, int i, int msg_size)
     }
     else
         cerr << "read failed" << endl;
+    }
+    gettimeofday(&(bench_time->back().second), NULL);
 }
 
 void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time)
@@ -159,7 +186,15 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size)
 
 int myRDMA::write_recv_rdma(int i, int socks_cnt, int msg_size)
 {
-    usleep(10);
+    for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
+    {
+        long long iteration = MAX_SEND_BYTES / msg_size;
+        iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
+        for (int iter = 0; iter < iteration; iter++)
+        {
+            usleep(9);
+        }
+    }
     return 0;
 }
 
@@ -193,10 +228,16 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
     }
     else if (strcmp(opcode, "write") == 0)
     {
-        // cerr << "write_rdma run" << endl;
-        for (int i = 0; i < socks_cnt; i++)
+        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
-            write_rdma(msg, i, msg_size);
+            for (int i = 0; i < socks_cnt; i++)
+                worker.push_back(thread(&myRDMA::write_rdma, myRDMA(), msg, i, msg_size, &bench_time[i]));
+
+            for (int i = 0; i < socks_cnt; i++)
+            {
+                worker.back().join();
+                worker.pop_back();
+            }
         }
     }
     else if (strcmp(opcode, "write_with_imm") == 0)
@@ -216,9 +257,17 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
     }
     else if (strcmp(opcode, "read") == 0)
     {
-        for (int i = 0; i < socks_cnt; i++)
+        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
-            read_rdma(msg, i, msg_size);
+            for (int i = 0; i < socks_cnt; i++)
+                worker.push_back(
+                    thread(&myRDMA::read_rdma, myRDMA(), msg, i, msg_size, &bench_time[i]));
+            
+            for (int i = 0; i < socks_cnt; i++)
+            {
+                worker.back().join();
+                worker.pop_back();
+            }
         }
     }
     else
@@ -280,8 +329,10 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         writeFile.write(send_data, strlen(send_data));
 
     }
-    cout << "정상 종료" << endl;
+    writeFile.close();
+    printf("파일 저장 & 정상 종료\n");
 }
+
 int myRDMA::recv_t(int socks_cnt, const char *opcode, int msg_size)
 {
     std::vector<std::thread> worker;
@@ -298,7 +349,8 @@ int myRDMA::recv_t(int socks_cnt, const char *opcode, int msg_size)
     {
         for (int i = 0; i < socks_cnt; i++)
         {
-            write_recv_rdma(i, socks_cnt, msg_size);
+            worker.push_back(
+                std::thread(&myRDMA::write_recv_rdma, myRDMA(), i, socks_cnt, msg_size));
         }
     }
     else if (strcmp(opcode, "write_with_imm") == 0)
@@ -313,7 +365,9 @@ int myRDMA::recv_t(int socks_cnt, const char *opcode, int msg_size)
     {
         for (int i = 0; i < socks_cnt; i++)
         {
-            read_recv_rdma(i, socks_cnt, msg_size);
+            worker.push_back(
+                std::thread(&myRDMA::write_recv_rdma, myRDMA(), i, socks_cnt, msg_size));
+            // 코드 내부에서 별도의 작업을 수행하지 않아 write와 동일한 함수 호출
         }
     }
     else

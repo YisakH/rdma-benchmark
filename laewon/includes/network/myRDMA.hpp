@@ -6,8 +6,8 @@ using namespace std;
 class myRDMA{
     public:
         void send_rdma(char* msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time);
-        void write_rdma(char *msg, int i, int msg_size);
-        void read_rdma(char *msg, int i, int msg_size);
+        void write_rdma(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time);
+        void read_rdma(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time);
         int read_recv_rdma(int i, int socks_cnt, int msg_size);
         void write_rdma_with_imm(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time);
         int send_recv_rdma(int i, int socks_cnt, int msg_size);
