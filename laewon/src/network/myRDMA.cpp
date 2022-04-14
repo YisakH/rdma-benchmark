@@ -47,6 +47,9 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
 
         for (int iter = 0; iter < iteration; iter++)
         {
+		if((iter%10000)==0){
+			printf("%d\n", iter);
+		}
             rdma.post_rdma_send(get<4>(myrdma.rdma_info[0][i]),
                                 get<5>(myrdma.rdma_info[0][i]),
                                 myrdma.send_buffer[i],
@@ -220,9 +223,9 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         }
 
         cerr << "<---- send : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
-        
+
         total_time /= socks_cnt;
-        printf("total time : %ld\n", total_time);
+        printf("total time : %ldus\n", total_time);
         double msec = ((double)total_time) / 1000000L * 1000;
 
         double msgRate = ((double)(iteration * 1000000L)) / total_time;
