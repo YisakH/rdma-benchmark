@@ -27,7 +27,7 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
 {
     RDMA rdma;
 
-    printf("<---- send : %d bytes 벤치마크 테스트 시작 ---------->\n", msg_size);
+    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", msg_size);
 
     struct timeval start, end;
     bench_time->push_back({start, end});
