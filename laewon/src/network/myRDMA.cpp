@@ -27,7 +27,7 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
 {
     RDMA rdma;
 
-    cerr << "<---- send : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
+    printf("<---- send : %d bytes 벤치마크 테스트 시작 ---------->\n", msg_size);
 
     struct timeval start, end;
     bench_time->push_back({start, end});
@@ -259,7 +259,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         char send_data[100];
         sprintf(send_data, "%d %.3f %.3f %.3f\n", msg_size, msgRate, bandwidth, latency);
         writeFile.write(send_data, strlen(send_data));
-        
+
     }
     cout << "정상 종료" << endl;
 }
