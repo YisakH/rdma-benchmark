@@ -284,7 +284,8 @@ int myRDMA::recv_t(int socks_cnt, const char *opcode, int msg_size)
     printf("%d worker is created\n", worker.size());
     for (int i = 0; i < worker.size(); i++)
     {
-        worker[i].join();
+        if (worker[i].joinable())
+            worker[i].join();
     }
     return 1;
 }
