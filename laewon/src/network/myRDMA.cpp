@@ -180,9 +180,12 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg
         cerr << "rdma_send_msg opcode error" << endl;
         exit(-1);
     }
-
+    cout << "183 myRDMA call" << endl;
+    printf("%d size\n", worker.size());
     for(int i=0; i<socks_cnt; i++){
+        printf("%d didn't call\n", i);
         worker[i].join();
+        printf("%d call\n", i);
     }
     cout << "정상 종료" << endl;
 }
@@ -225,6 +228,7 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode, int msg_size){
 void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, char* msg, int msg_size){
     //char *ms;
     //ms = change(msg);
+    cout << "func call" << endl;
     thread snd_msg = thread(&myRDMA::rdma_send_msg,myRDMA(), socks_cnt, opcode, msg, msg_size);
     recv_t(socks_cnt, opcode, msg_size);
     //myRDMA::recv_t(socks_cnt,opcode);
