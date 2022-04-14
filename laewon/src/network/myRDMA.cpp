@@ -4,9 +4,9 @@
 #include <time.h>
 #include <sys/time.h>
 
-#define MAX_SEND_BYTES static_cast<long>(10737418240) // 10GB
+#define MAX_SEND_BYTES static_cast<long>(107374182400) // 10GB
 #define MAX_MSG_SIZE 8388608
-#define MAX_ITERATION 1000
+#define MAX_ITERATION 10000
 
 uint64_t timeDiff(struct timeval stop, struct timeval start)
 {
@@ -35,6 +35,7 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
 
     long long iteration = MAX_SEND_BYTES / msg_size;
     iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
+    printf("eteration : %d\n", iteration);
 
     gettimeofday(&(bench_time->back().first), NULL);
 
