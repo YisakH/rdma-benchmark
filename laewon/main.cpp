@@ -10,11 +10,6 @@
 
 const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
 
-uint64_t timeDiff(struct timeval stop, struct timeval start)
-{
-    return (stop.tv_sec * 1000000L + stop.tv_usec) - (start.tv_sec * 1000000L + start.tv_usec);
-}
-
 // static char *send_buffer[num_of_server];
 // static char *recv_buffer[num_of_server];
 
@@ -59,69 +54,40 @@ int main(int argc, char *argv[])
 
     cout << "======================================================" << endl;
 
-    if (strcmp(argv[2], "s") == 0)
+    time_t timer = time(NULL);
+    struct tm *t = localtime(&timer);
+
+    ofstream writeFile;
+    string date;
+    date = "" + to_string(t->tm_year - 100) + "0" + to_string(t->tm_mon + 1) + to_string(t->tm_mday) +
+           "_" +
+           to_string(t->tm_hour) +
+           to_string(t->tm_min) + to_string(t->tm_sec);
+    string filename(opcode);
+    filename = "./logs/" + filename;
+    filename += date;
+    filename += ".txt";
+    writeFile.open(filename);
+
+    if (!writeFile.is_open())
     {
-        time_t timer = time(NULL);
-        struct tm *t = localtime(&timer);
-
-        ofstream writeFile;
-        string date;
-        date = "" + to_string(t->tm_year - 100) + "0" + to_string(t->tm_mon + 1) + to_string(t->tm_mday) +
-               "_" +
-               to_string(t->tm_hour) +
-               to_string(t->tm_min) + to_string(t->tm_sec);
-        string filename(opcode);
-        filename = "./logs/" + filename;
-        filename += date;
-        filename += ".txt";
-        writeFile.open(filename);
-
-        if (!writeFile.is_open())
-        {
-            cerr << "file open error" << endl;
-        }
-        char *tmp = "M_Size #_of_Msg throughput latency\n";
-        writeFile.write(tmp, strlen(tmp));
-
-        /*
-        myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
-
-        for(int i = 0; i<socks_cnt;i++){
-          cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
-        }
-        */
-        int msg_size = 1;
-        long long iteration = MAX_SEND_BYTES / msg_size;
-        iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
-
-        cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
-
-        struct timeval start, stop;
-        gettimeofday(&start, NULL);
-
-        myrdma.fucking_rdma(socks_cnt, opcode, "msg", msg_size);
-
-        uint64_t time = timeDiff(stop, start);
-        printf("total time : %ld\n", time);
-        double msec = ((double)time) / 1000000L * 1000;
-
-        double msgRate = ((double)(iteration * 1000000L)) / time;
-        double bandwidth = ((double)(iteration * msg_size)) / (1024 * 1024) / (((double)time) / 1000000L);
-        double latency = ((double)msec) / iteration;
-        printf("%.3f msg/sec\t%.3f MB/sec\n", msgRate, bandwidth);
-        printf("latency : %.3fms\n", latency);
-        fflush(stdout);
-
-        char send_data[100];
-        sprintf(send_data, "%d %.3f %.3f %.3f\n", msg_size, msgRate, bandwidth, latency);
-        writeFile.write(send_data, strlen(send_data));
-
-        writeFile.close();
-
-        // sleep(10);
-        myrdma.exit_rdma(socks_cnt);
-
+        cerr << "file open error" << endl;
     }
-    
+    char *tmp = "M_Size #_of_Msg throughput latency\n";
+    writeFile.write(tmp, strlen(tmp));
+
+    /*
+    myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
+
+    for(int i = 0; i<socks_cnt;i++){
+      cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
+    }
+    */
+
+    writeFile.close();
+
+    // sleep(10);
+    myrdma.exit_rdma(socks_cnt);
+
     return 0;
 }

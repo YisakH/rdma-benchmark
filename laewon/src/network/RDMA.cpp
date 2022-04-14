@@ -260,7 +260,7 @@ void RDMA::post_rdma_send(struct ibv_qp *qp, struct ibv_mr *mr, void *addr, uint
       .next       = NULL,
       .sg_list    = &sge,
       .num_sge    = 1,
-      .opcode     = IBV_WR_SEND_WITH_IMM,
+      .opcode     = IBV_WR_SEND,
       .send_flags = 0,
       .imm_data   = htonl(0x1234) // 임의의 32비트 값   
   };
