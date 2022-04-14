@@ -9,7 +9,7 @@ class myRDMA{
         void write_rdma(char *msg, int i, int msg_size);
         void read_rdma(char *msg, int i, int msg_size);
         int read_recv_rdma(int i, int socks_cnt, int msg_size);
-        void write_rdma_with_imm(char *msg, int i, int msg_size);
+        void write_rdma_with_imm(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time);
         int send_recv_rdma(int i, int socks_cnt, int msg_size);
         int write_recv_rdma(int i, int socks_cnt, int msg_size);
         void rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg_size);

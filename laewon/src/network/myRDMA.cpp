@@ -27,21 +27,18 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
 {
     RDMA rdma;
 
-    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", msg_size);
+    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", i, msg_size);
 
     struct timeval start, end;
     bench_time->push_back({start, end});
 
-    // memset(send_buffer, msg_size - 1, 'A');
-    // msg[msg_size - 1] = '\0';
+
     long long iteration = MAX_SEND_BYTES / msg_size;
     iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
     gettimeofday(&(bench_time->back().first), NULL);
 
     strcpy(myrdma.send_buffer[i], msg);
-
-    // cerr << "전송 준비 완료" << endl;
 
     for (int iter = 0; iter < iteration; iter++)
     {
@@ -105,20 +102,35 @@ void myRDMA::read_rdma(char *msg, int i, int msg_size)
         cerr << "read failed" << endl;
 }
 
-void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size)
+void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time)
 {
     RDMA rdma;
 
+    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", i, msg_size);
+
+    struct timeval start, end;
+    bench_time->push_back({start, end});
+
+
+    long long iteration = MAX_SEND_BYTES / msg_size;
+    iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
+
+    gettimeofday(&(bench_time->back().first), NULL);
+
     strcpy(myrdma.send_buffer[i], msg);
 
-    rdma.post_rdma_write_with_imm(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i],
-                                  msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
-    if (rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) == true)
+    for (int iter = 0; iter < iteration; iter++)
     {
-        // cerr << "send success" << endl;
+        rdma.post_rdma_write_with_imm(get<4>(myrdma.rdma_info[0][i]), get<5>(myrdma.rdma_info[0][i]), myrdma.send_buffer[i],
+                                    msg_size, myrdma.qp_key[i].first, myrdma.qp_key[i].second);
+        if (rdma.pollCompletion(get<3>(myrdma.rdma_info[0][i])) == true)
+        {
+            // cerr << "send success" << endl;
+        }
+        else
+            cout << "send failed" << endl;
     }
-    else
-        cout << "send failed" << endl;
+    gettimeofday(&(bench_time->back().second), NULL);
 }
 int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size)
 {
@@ -192,7 +204,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             for (int i = 0; i < socks_cnt; i++)
-                write_rdma_with_imm(msg, i, msg_size);
+                worker.push_back(thread(&myRDMA::write_rdma_with_imm, myRDMA(), msg, i, msg_size, &bench_time[i]));
             
 
             for (int i = 0; i < socks_cnt; i++)
@@ -309,6 +321,7 @@ int myRDMA::recv_t(int socks_cnt, const char *opcode, int msg_size)
         cerr << "recv_t opcode error" << endl;
         exit(-1);
     }
+    
     printf("%d worker is created\n", worker.size());
     for (int i = 0; i < worker.size(); i++)
     {
