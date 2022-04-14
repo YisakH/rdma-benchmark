@@ -222,7 +222,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
             total_time += time;
         }
 
-        cerr << "<---- send : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
+        cerr << "<---- send : " << msg_size << "bytes 벤치마크 테스트 결과 ---------->" << endl;
 
         total_time /= socks_cnt;
         printf("total time : %ldus\n", total_time);
