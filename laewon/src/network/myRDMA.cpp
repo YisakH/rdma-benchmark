@@ -214,7 +214,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         uint64_t total_time = 0;
         for (int thread_index = 0; thread_index < bench_time.size(); thread_index++)
         {
-            uint64_t time = timeDiff(bench_time[thread_index][mSize_index].first, bench_time[thread_index][mSize_index].second);
+            uint64_t time = timeDiff(bench_time[thread_index][mSize_index].second, bench_time[thread_index][mSize_index].first);
             total_time += time;
         }
         total_time /= socks_cnt;
