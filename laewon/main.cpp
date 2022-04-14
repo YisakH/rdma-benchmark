@@ -67,16 +67,17 @@ int main(int argc, char *argv[])
         ofstream writeFile;
         string date;
         date = "" + to_string(t->tm_year - 100) + "0" + to_string(t->tm_mon + 1) + to_string(t->tm_mday) +
-                "_" +
-                to_string(t->tm_hour) +
-                to_string(t->tm_min) + to_string(t->tm_sec);
+               "_" +
+               to_string(t->tm_hour) +
+               to_string(t->tm_min) + to_string(t->tm_sec);
         string filename(opcode);
         filename = "./logs/" + filename;
         filename += date;
         filename += ".txt";
         writeFile.open(filename);
 
-        if(!writeFile.is_open()){
+        if (!writeFile.is_open())
+        {
             cerr << "file open error" << endl;
         }
         char *tmp = "M_Size #_of_Msg throughput latency\n";
@@ -89,42 +90,38 @@ int main(int argc, char *argv[])
           cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
         }
         */
-       int msg_size = 1;
-            long long iteration = MAX_SEND_BYTES / msg_size;
-            iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
+        int msg_size = 1;
+        long long iteration = MAX_SEND_BYTES / msg_size;
+        iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
-            cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
+        cerr << "<---- " << opcode << " : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
 
-            struct timeval start, stop;
-            gettimeofday(&start, NULL);
+        struct timeval start, stop;
+        gettimeofday(&start, NULL);
 
+        myrdma.fucking_rdma(socks_cnt, opcode, "msg", msg_size);
 
-            myrdma.fucking_rdma(socks_cnt, opcode, "msg", msg_size);
+        uint64_t time = timeDiff(stop, start);
+        printf("total time : %ld\n", time);
+        double msec = ((double)time) / 1000000L * 1000;
 
+        double msgRate = ((double)(iteration * 1000000L)) / time;
+        double bandwidth = ((double)(iteration * msg_size)) / (1024 * 1024) / (((double)time) / 1000000L);
+        double latency = ((double)msec) / iteration;
+        printf("%.3f msg/sec\t%.3f MB/sec\n", msgRate, bandwidth);
+        printf("latency : %.3fms\n", latency);
+        fflush(stdout);
 
-            uint64_t time = timeDiff(stop, start);
-            printf("total time : %ld\n", time);
-            double msec = ((double)time) / 1000000L * 1000;
-
-            double msgRate = ((double)(iteration * 1000000L)) / time;
-            double bandwidth = ((double)(iteration * msg_size)) / (1024 * 1024) / (((double)time) / 1000000L);
-            double latency = ((double)msec) / iteration;
-            printf("%.3f msg/sec\t%.3f MB/sec\n", msgRate, bandwidth);
-            printf("latency : %.3fms\n", latency);
-            fflush(stdout);
-
-
-
-            
-            char send_data[100];
-            sprintf(send_data, "%d %.3f %.3f %.3f\n", msg_size, msgRate, bandwidth, latency);
-            writeFile.write(send_data, strlen(send_data));
-
+        char send_data[100];
+        sprintf(send_data, "%d %.3f %.3f %.3f\n", msg_size, msgRate, bandwidth, latency);
+        writeFile.write(send_data, strlen(send_data));
 
         writeFile.close();
 
-    // sleep(10);
-    myrdma.exit_rdma(socks_cnt);
+        // sleep(10);
+        myrdma.exit_rdma(socks_cnt);
 
+    }
+    
     return 0;
 }
