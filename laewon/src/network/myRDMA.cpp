@@ -27,7 +27,6 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
 {
     RDMA rdma;
 
-
     cerr << "<---- send : " << msg_size << "bytes 벤치마크 테스트 시작 ---------->" << endl;
 
     struct timeval start, end;
@@ -46,9 +45,11 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
 
     for (int iter = 0; iter < iteration; iter++)
     {
-    if((iter%10000)==0){
-        printf("%d\n", iter);
-    }
+        /*
+        if((iter%10000)==0){
+            printf("%d\n", iter);
+        }
+        */
         rdma.post_rdma_send(get<4>(myrdma.rdma_info[0][i]),
                             get<5>(myrdma.rdma_info[0][i]),
                             myrdma.send_buffer[i],
@@ -66,7 +67,6 @@ void myRDMA::send_rdma(char *msg, int i, int msg_size, vector<pair<struct timeva
         }
     }
     gettimeofday(&(bench_time->back().second), NULL);
-    
 }
 
 void myRDMA::write_rdma(char *msg, int i, int msg_size)
@@ -147,14 +147,12 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size)
 
 int myRDMA::write_recv_rdma(int i, int socks_cnt, int msg_size)
 {
-
     usleep(10);
     return 0;
 }
 
 int myRDMA::read_recv_rdma(int i, int socks_cnt, int msg_size)
 {
-
     usleep(10);
     return 0;
 }
@@ -167,14 +165,15 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
 
     if (strcmp(opcode, "send") == 0)
     {
-        for (int msg_size=1; msg_size <= MAX_MSG_SIZE; msg_size*=2)
+        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             for (int i = 0; i < socks_cnt; i++)
             {
                 worker.push_back(thread(&myRDMA::send_rdma, myRDMA(), msg, i, msg_size, &bench_time[i]));
             }
 
-            for (int i=0; i<socks_cnt; i++){
+            for (int i = 0; i < socks_cnt; i++)
+            {
                 worker.back().join();
                 worker.pop_back();
             }
