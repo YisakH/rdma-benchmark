@@ -17,6 +17,7 @@ bool RDMA::pollCompletion(struct ibv_cq* cq) {
   
   if (result > 0 && wc.status == ibv_wc_status::IBV_WC_SUCCESS) {
     // success
+    
     return true;
   }
 
