@@ -31,8 +31,8 @@ void myRDMA::send_rdma(char* msg, int i, int msg_size, vector<pair<struct timeva
             struct timeval start, end;
             bench_time->push_back({start, end});
 
-            memset(send_buffer, msg_size - 1, 'A');
-            msg[msg_size - 1] = '\0';
+            //memset(send_buffer, msg_size - 1, 'A');
+            //msg[msg_size - 1] = '\0';
             long long iteration = MAX_SEND_BYTES / msg_size;
             iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 
