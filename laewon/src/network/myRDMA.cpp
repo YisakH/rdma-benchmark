@@ -208,6 +208,27 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         exit(-1);
     }
 
+    time_t timer = time(NULL);
+    struct tm *t = localtime(&timer);
+
+    ofstream writeFile;
+    string date;
+    date = "" + to_string(t->tm_year - 100) + "0" + to_string(t->tm_mon + 1) + to_string(t->tm_mday) +
+            "_" +
+            to_string(t->tm_hour) +
+            to_string(t->tm_min) + to_string(t->tm_sec);
+    string filename(opcode);
+    filename = "./logs/" + filename;
+    filename += date;
+    filename += ".txt";
+    writeFile.open(filename);
+
+    if(!writeFile.is_open()){
+        cerr << "file open error" << endl;
+        return;
+    }
+
+
     for (int mSize_index = 0; mSize_index < bench_time[0].size(); mSize_index++)
     {
         int msg_size = 1 << mSize_index;
@@ -233,6 +254,12 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
         printf("%.3f msg/sec\t%.3f MB/sec\n", msgRate, bandwidth);
         printf("latency : %.3fms\n", latency);
         fflush(stdout);
+
+
+        char send_data[100];
+        sprintf(send_data, "%d %.3f %.3f %.3f\n", msg_size, msgRate, bandwidth, latency);
+        writeFile.write(send_data, strlen(send_data));
+        
     }
     cout << "정상 종료" << endl;
 }
