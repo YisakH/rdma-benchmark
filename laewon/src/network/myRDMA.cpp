@@ -189,10 +189,17 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
     }
     else if (strcmp(opcode, "write_with_imm") == 0)
     {
-        // cerr << "write_with_imm_rdma run" <<endl;
-        for (int i = 0; i < socks_cnt; i++)
+        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
-            write_rdma_with_imm(msg, i, msg_size);
+            for (int i = 0; i < socks_cnt; i++)
+                write_rdma_with_imm(msg, i, msg_size);
+            
+
+            for (int i = 0; i < socks_cnt; i++)
+            {
+                worker.back().join();
+                worker.pop_back();
+            }
         }
     }
     else if (strcmp(opcode, "read") == 0)
@@ -286,7 +293,8 @@ int myRDMA::recv_t(int socks_cnt, const char *opcode, int msg_size)
     {
         for (int i = 0; i < socks_cnt; i++)
         {
-            send_recv_rdma(i, socks_cnt, msg_size);
+            worker.push_back(
+                std::thread(&myRDMA::send_recv_rdma, myRDMA(), i, socks_cnt, msg_size));
         }
     }
     else if (strcmp(opcode, "read") == 0)
