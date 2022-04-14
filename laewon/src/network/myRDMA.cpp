@@ -70,7 +70,7 @@ void myRDMA::write_rdma(char *msg, int i, int msg_size, vector<pair<struct timev
 {
     RDMA rdma;
 
-    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", i, msg_size);
+    printf("<---- %d thread : writing %d bytes benchmark test start! ---------->\n", i, msg_size);
 
     struct timeval start, end;
     bench_time->push_back({start, end});
@@ -101,7 +101,7 @@ void myRDMA::write_rdma(char *msg, int i, int msg_size, vector<pair<struct timev
 void myRDMA::read_rdma(char *msg, int i, int msg_size, vector<pair<struct timeval, struct timeval>> *bench_time)
 {
     RDMA rdma;
-    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", i, msg_size);
+    printf("<---- %d thread : reading %d bytes benchmark test start! ---------->\n", i, msg_size);
 
     struct timeval start, end;
     bench_time->push_back({start, end});
@@ -133,7 +133,7 @@ void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size, vector<pair<str
 {
     RDMA rdma;
 
-    printf("<---- %d thread : sending %d bytes benchmark test start! ---------->\n", i, msg_size);
+    printf("<---- %d thread : writing(Imm) %d bytes benchmark test start! ---------->\n", i, msg_size);
 
     struct timeval start, end;
     bench_time->push_back({start, end});
