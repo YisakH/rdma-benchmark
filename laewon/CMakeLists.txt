@@ -4,8 +4,11 @@ project(RDMAtest)
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
 set(CMAKE_BUILD_TYPE Debug)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
 
-add_compile_options(-O2)
+add_compile_options("-O2 -pg")
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/tools)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
