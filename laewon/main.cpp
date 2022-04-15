@@ -8,7 +8,7 @@
 #define MAX_MSG_SIZE 10485760
 #define MAX_ITERATION 1000
 
-const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101"};
+const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101", "192.168.1.102"};
 
 // static char *send_buffer[num_of_server];
 // static char *recv_buffer[num_of_server];
