@@ -31,7 +31,6 @@ void myRDMA::send_rdma(char* msg, int i, int msg_size){
 
 void myRDMA::write_rdma(char *msg, int i, int msg_size){
     RDMA rdma;
-    TCP tcp;
    
     //strcpy(myrdma.send_buffer[i],msg);
     
@@ -47,7 +46,6 @@ void myRDMA::write_rdma(char *msg, int i, int msg_size){
 
 void myRDMA::read_rdma(char *msg, int i, int msg_size){
     RDMA rdma;
-    TCP tcp;
    
     //strcpy(myrdma.send_buffer[i],msg);
     
