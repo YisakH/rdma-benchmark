@@ -4,6 +4,10 @@ project(RDMAtest)
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
 set(CMAKE_BUILD_TYPE MinSizeRel)
 
+set(CMake_CXX_FLAGS "-O2")
+
+add_compile_options(-O2)
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/tools)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
 
