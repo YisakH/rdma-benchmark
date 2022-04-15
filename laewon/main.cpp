@@ -3,7 +3,7 @@
 #include "myRDMA.hpp"
 #include <sys/time.h>
 
-#define num_of_server 2
+#define num_of_server 3
 #define MAX_SEND_BYTES static_cast<long>(10737418240) // 10GB
 #define MAX_MSG_SIZE 10485760
 #define MAX_ITERATION 1000
