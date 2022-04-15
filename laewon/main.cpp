@@ -89,6 +89,8 @@ int main(int argc, char *argv[])
           cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
         }
         */
+        
+        sleep(1);
 
         for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
