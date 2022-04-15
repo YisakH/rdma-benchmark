@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(RDMAtest)
 set(CMAKE_CXX_COMPILER "/usr/bin/g++")
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE MinSizeRel)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/tools)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/network)
