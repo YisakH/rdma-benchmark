@@ -13,9 +13,8 @@ char* change(string temp){
 }
 
 void myRDMA::send_rdma(char* msg, int i, int msg_size){
-    RDMA rdma;
     
-    strcpy(myrdma.send_buffer[i],msg);
+    //strcpy(myrdma.send_buffer[i],msg);
 
     //cerr << "전송 준비 완료" << endl;
     
@@ -74,8 +73,6 @@ void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size){
     
 }
 int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
-    RDMA rdma;
-
     rdma.post_rdma_recv(get<4>(myrdma.rdma_info[1][i]), get<5>(myrdma.rdma_info[1][i]), 
                         get<3>(myrdma.rdma_info[1][i]),myrdma.recv_buffer[i], msg_size);
     rdma.pollCompletion(get<3>(myrdma.rdma_info[1][i]));

@@ -21,6 +21,7 @@ class myRDMA{
         void set_buffer(char send[][BufSize], char recv[][BufSize]);
         void exit_rdma(int socks_cnt);
         int cnt_thread();
+        RDMA rdma;
     private:
         std::vector<tuple<struct ibv_context*, struct ibv_pd*, 
                         int, struct ibv_cq*,
