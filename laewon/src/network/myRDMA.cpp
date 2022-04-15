@@ -159,11 +159,11 @@ void myRDMA::write_rdma_with_imm(char *msg, int i, int msg_size, vector<pair<str
     }
     gettimeofday(&(bench_time->back().second), NULL);
 }
-int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size)
+int myRDMA::send_recv_rdma(int i, int socks_cnt, int input_msg_size)
 {
     RDMA rdma;
 
-    for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
+    for (int msg_size = input_msg_size; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
     {
         long long iteration = MAX_SEND_BYTES / msg_size;
         iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
@@ -184,9 +184,9 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size)
     return 1;
 }
 
-int myRDMA::write_recv_rdma(int i, int socks_cnt, int msg_size)
+int myRDMA::write_recv_rdma(int i, int socks_cnt, int input_msg_size)
 {
-    for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
+    for (int msg_size = input_msg_size; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
     {
         long long iteration = MAX_SEND_BYTES / msg_size;
         iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
@@ -204,7 +204,7 @@ int myRDMA::read_recv_rdma(int i, int socks_cnt, int msg_size)
     return 0;
 }
 
-void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg_size)
+void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int input_msg_size)
 {
 
     std::vector<std::thread> worker;
@@ -212,7 +212,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
 
     if (strcmp(opcode, "send") == 0)
     {
-        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
+        for (int msg_size = input_msg_size; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             for (int i = 0; i < socks_cnt; i++)
             {
@@ -228,7 +228,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
     }
     else if (strcmp(opcode, "write") == 0)
     {
-        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
+        for (int msg_size = input_msg_size; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             for (int i = 0; i < socks_cnt; i++)
                 worker.push_back(thread(&myRDMA::write_rdma, myRDMA(), msg, i, msg_size, &bench_time[i]));
@@ -242,7 +242,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
     }
     else if (strcmp(opcode, "write_with_imm") == 0)
     {
-        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
+        for (int msg_size = input_msg_size; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             for (int i = 0; i < socks_cnt; i++)
                 worker.push_back(thread(&myRDMA::write_rdma_with_imm, myRDMA(), msg, i, msg_size, &bench_time[i]));
@@ -257,7 +257,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
     }
     else if (strcmp(opcode, "read") == 0)
     {
-        for (int msg_size = 1; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
+        for (int msg_size = input_msg_size; msg_size <= MAX_MSG_SIZE; msg_size *= 2)
         {
             for (int i = 0; i < socks_cnt; i++)
                 worker.push_back(
@@ -299,7 +299,7 @@ void myRDMA::rdma_send_msg(int socks_cnt, const char *opcode, char *msg, int msg
 
     for (int mSize_index = 0; mSize_index < bench_time[0].size(); mSize_index++)
     {
-        int msg_size = 1 << mSize_index;
+        int msg_size = input_msg_size << mSize_index;
         long long iteration = MAX_SEND_BYTES / msg_size;
         iteration = (iteration > MAX_ITERATION) ? MAX_ITERATION : iteration;
 

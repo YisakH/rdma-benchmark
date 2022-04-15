@@ -6,7 +6,7 @@
 #define num_of_server 3
 #define MAX_SEND_BYTES static_cast<long>(10737418240) // 10GB
 #define MAX_MSG_SIZE 10485760
-#define MAX_ITERATION 1000000
+#define MAX_ITERATION 1000
 
 const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101", "192.168.1.102"};
 
@@ -26,6 +26,8 @@ int main(int argc, char *argv[])
         cout << argv[0] << " <MY IP> " << endl;
         exit(1);
     }
+
+    int msg_size = atoi(argv[2]);
 
     char *opcode = argv[3];
 
@@ -54,7 +56,7 @@ int main(int argc, char *argv[])
 
     cout << "======================================================" << endl;
 
-    myrdma.fucking_rdma(socks_cnt, opcode, "msg", 1);
+    myrdma.fucking_rdma(socks_cnt, opcode, "msg", msg_size);
 
     // sleep(10);
     myrdma.exit_rdma(socks_cnt);
