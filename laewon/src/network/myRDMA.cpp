@@ -95,7 +95,7 @@ int myRDMA::send_recv_rdma(int i, int socks_cnt, int msg_size){
 
 int myRDMA::write_recv_rdma(int i, int socks_cnt, int msg_size){
     
-    usleep(10);
+    usleep(30);
     return 0;
 }
 
@@ -192,6 +192,7 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode, int msg_size){
 void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, char* msg, int msg_size){
     //char *ms;
     //ms = change(msg);
+    sleep(1);
     rdma_send_msg(socks_cnt, opcode, msg, msg_size);
     //myRDMA::recv_t(socks_cnt,opcode);
 
