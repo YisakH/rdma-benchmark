@@ -3,12 +3,12 @@
 #include "myRDMA.hpp"
 #include <sys/time.h>
 
-#define num_of_server 3
+#define num_of_server 6
 #define MAX_SEND_BYTES static_cast<long>(10737418240) // 10GB
 #define MAX_MSG_SIZE 10485760
 #define MAX_ITERATION 10000
 
-const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101", "192.168.1.102"};
+const char *server[num_of_server] = {"192.168.1.100", "192.168.1.101", "192.168.1.102", "192.168.1.103", "192.168.1.104", "192.168.1.105"};
 
 // static char *send_buffer[num_of_server];
 // static char *recv_buffer[num_of_server];
