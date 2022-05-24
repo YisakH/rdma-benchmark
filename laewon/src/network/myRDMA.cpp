@@ -184,7 +184,7 @@ int myRDMA::recv_t(int socks_cnt, const char* opcode, int msg_size){
     return 1;
 }
 
-void myRDMA::fucking_rdma(int socks_cnt, const char* opcode, char* msg, int msg_size){
+void myRDMA::rdma_run(int socks_cnt, const char* opcode, char* msg, int msg_size){
     //char *ms;
     //ms = change(msg);
     rdma_send_msg(socks_cnt, opcode, msg, msg_size);

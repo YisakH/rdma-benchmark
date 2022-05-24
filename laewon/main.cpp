@@ -81,14 +81,6 @@ int main(int argc, char *argv[])
         }
         char *tmp = "M_Size #_of_Msg throughput latency\n";
         writeFile.write(tmp, strlen(tmp));
-
-        /*
-        myrdma.fucking_rdma(socks_cnt, "send", "Yisak is Handsome");
-
-        for(int i = 0; i<socks_cnt;i++){
-          cout << "recv_buffer["<< i <<"] SEND: "<<recv_buffer[i]<< endl;
-        }
-        */
         
         sleep(1);
 
@@ -106,7 +98,7 @@ int main(int argc, char *argv[])
 
             for (int iter = 0; iter < iteration; iter++)
             {
-                myrdma.fucking_rdma(socks_cnt, opcode, msg, msg_size);
+                myrdma.rdma_run(socks_cnt, opcode, msg, msg_size);
             }
 
             gettimeofday(&stop, NULL);

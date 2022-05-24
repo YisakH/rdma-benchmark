@@ -15,7 +15,7 @@ class myRDMA{
         void rdma_send_msg(int socks_cnt, const char* opcode, char* msg, int msg_size);
         void send_t(int socks_cnt);
         int recv_t(int socks_cnt, const char* opcode, int msg_size);
-        void fucking_rdma(int socks_cnt, const char* opcode, char* msg, int msg_size);
+        void rdma_run(int socks_cnt, const char* opcode, char* msg, int msg_size);
         void create_rdma_info(int socks_cnt);
         void send_info_change_qp(int socks_cnt);
         void set_buffer(char send[][BufSize], char recv[][BufSize]);
